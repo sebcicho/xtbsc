@@ -2,11 +2,16 @@ package com.xtbsc.xtbsc;
 
 import com.xtbsc.dataCollector.ExchangeRateApiClient;
 import com.xtbsc.dataCollector.dto.RatesDto;
+import com.xtbsc.dbservice.entities.CurrencyData;
+import com.xtbsc.xtbsc.dto.CurrencyDto;
+import com.xtbsc.xtbsc.mapper.CurrencyMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -24,6 +29,12 @@ public class ExchangeRateServiceRestController {
         this.currencyDataPersistance = currencyDataPersistance;
     }
 
+    @GetMapping("currency/data")
+    public @ResponseBody ResponseEntity<CurrencyDto> getCurrencyData(@RequestParam String symbol) {
+        List<CurrencyData> currencyData = this.currencyDataPersistance.getDataBySymbol(symbol);
+
+        return ResponseEntity.ok(CurrencyMapper.toDto(currencyData));
+    }
 
     @PostMapping("/internal/task/fetchcurrency")
     public @ResponseBody ResponseEntity<RatesDto> fetchCurrencyData (@RequestParam(required = false) String date) {

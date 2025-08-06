@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -28,6 +29,10 @@ public class CurrencyDataPersistance {
     public void persistCurrency(RatesDto ratesDto) {
         Set<CurrencyData> currencies = RatesMapper.fromDto(ratesDto, ImmutableSet.of("PLN", "EUR", "BTC", "GPB", "NOK", "CHF"));
         LOGGER.info(String.format("Currencies being persisted: %s", currencies));
+        this.currencyDataRepository.saveAll(currencies);
     }
 
+    public List<CurrencyData> getDataBySymbol(String symbol) {
+        return this.currencyDataRepository.findBySymbolTo(symbol);
+    }
 }
