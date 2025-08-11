@@ -1,14 +1,11 @@
 package com.xtbsc.dbservice.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "financial_data")
+@Table(name = "financial_data",  uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"timestamp", "date"})
+})
 public class FinancialData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +15,10 @@ public class FinancialData {
     @Column(nullable = false)
     private Long timestamp;
 
+    // Use Instant for the timestamp, which is a good practice for time-series data
+    @Column(nullable = false)
+    private String date;
+
     // The symbol for the currency pair (e.g., "USD/EUR") or stock (e.g., "AAPL")
     @Column(nullable = false)
     private String symbol;
@@ -25,11 +26,7 @@ public class FinancialData {
     // The price value
     @Column(nullable = false)
     private Double value;
-
-    // The price value
-    @Column(nullable = false)
-    private String currency;
-
+    
     // Getters and Setters
     public Long getId() {
         return id;
@@ -63,11 +60,11 @@ public class FinancialData {
         this.value = value;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getDate() {
+        return date;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setDate(String date) {
+        this.date = date;
     }
 }

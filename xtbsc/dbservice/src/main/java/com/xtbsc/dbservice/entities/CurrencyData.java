@@ -14,7 +14,6 @@ public class CurrencyData {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Use Instant for the timestamp, which is a good practice for time-series data
     @Column(nullable = false)
     private Long timestamp;
 

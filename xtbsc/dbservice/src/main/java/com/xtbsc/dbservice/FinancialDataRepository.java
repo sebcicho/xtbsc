@@ -11,7 +11,7 @@ import java.util.List;
 public interface FinancialDataRepository extends JpaRepository<FinancialData, Integer> {
 
 	// Find data for a specific symbol within a time range
-	List<FinancialData> findBySymbol(String symbol);
+	List<FinancialData> findBySymbolOrderByTimestamp(String symbol);
 
 
 }

@@ -20,6 +20,8 @@ public class CurrencyDataPersistance {
 
     private final CurrencyDataRepository currencyDataRepository;
 
+    private final Set<String> SUPPORTED_CURRENCIES = ImmutableSet.of("PLN", "EUR", "BTC", "GPB", "NOK", "CHF");
+
     @Autowired
     public CurrencyDataPersistance(CurrencyDataRepository currencyDataRepository) {
         this.currencyDataRepository = currencyDataRepository;
@@ -27,12 +29,12 @@ public class CurrencyDataPersistance {
     }
 
     public void persistCurrency(RatesDto ratesDto) {
-        Set<CurrencyData> currencies = RatesMapper.fromDto(ratesDto, ImmutableSet.of("PLN", "EUR", "BTC", "GPB", "NOK", "CHF"));
+        Set<CurrencyData> currencies = RatesMapper.fromDto(ratesDto, SUPPORTED_CURRENCIES);
         LOGGER.info(String.format("Currencies being persisted: %s", currencies));
         this.currencyDataRepository.saveAll(currencies);
     }
 
     public List<CurrencyData> getDataBySymbol(String symbol) {
-        return this.currencyDataRepository.findBySymbolTo(symbol);
+        return this.currencyDataRepository.findBySymbolToOrderByTimestamp(symbol);
     }
 }
