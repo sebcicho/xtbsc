@@ -13,5 +13,5 @@ public interface FinancialDataRepository extends JpaRepository<FinancialData, In
 	// Find data for a specific symbol within a time range
 	List<FinancialData> findBySymbolOrderByTimestamp(String symbol);
 
-
+	boolean existsByTimestampAndDate(Long Timestamp, String date);
 }

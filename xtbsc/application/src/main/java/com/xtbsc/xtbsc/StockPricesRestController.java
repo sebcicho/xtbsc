@@ -26,17 +26,17 @@ public class StockPricesRestController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StockPricesRestController.class);
 
-    private final FinancialDataRepository financialDataRepository;
+    private final StockPricesPersistance stockPricesPersistance;
 
     private final StockPricesApiClient stockPricesApiClient;
 
     private final Set<String> SUPPORTED_CURRENCIES = ImmutableSet.of("PLN", "EUR", "BTC", "GPB", "NOK", "CHF");
 
     @Autowired
-    public StockPricesRestController(FinancialDataRepository financialDataRepository,
+    public StockPricesRestController(StockPricesPersistance stockPricesPersistance,
                                      StockPricesApiClient stockPricesApiClient) {
         this.stockPricesApiClient = stockPricesApiClient;
-        this.financialDataRepository = financialDataRepository;
+        this.stockPricesPersistance = stockPricesPersistance;
 
     }
 
@@ -57,7 +57,7 @@ public class StockPricesRestController {
                         (oldValue, newValue) -> oldValue,
                         TreeMap::new
                 ));
-
+        this.stockPricesPersistance.saveFinancialData(newValues, symbol);
         return ResponseEntity.ok(newValues);
 
     }

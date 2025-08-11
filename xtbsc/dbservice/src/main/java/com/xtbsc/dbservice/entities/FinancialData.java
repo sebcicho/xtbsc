@@ -19,14 +19,13 @@ public class FinancialData {
     @Column(nullable = false)
     private String date;
 
-    // The symbol for the currency pair (e.g., "USD/EUR") or stock (e.g., "AAPL")
     @Column(nullable = false)
     private String symbol;
 
     // The price value
     @Column(nullable = false)
     private Double value;
-    
+
     // Getters and Setters
     public Long getId() {
         return id;
