@@ -24,7 +24,7 @@ public class PricesMapper {
     @Nullable
     public static PricesDto toDtoFromStock(List<FinancialData> data) {
         Map<Long, Double> valuesMap = new TreeMap<>(Collections.reverseOrder());
-        data.forEach(currencyData -> valuesMap.put(currencyData.getTimestamp(), currencyData.getValue()));
+        data.forEach(financialData -> valuesMap.put(financialData.getTimestamp(), financialData.getValue()));
 
         Optional<FinancialData> optionalData = data.stream().findAny();
         if(optionalData.isPresent()) {
