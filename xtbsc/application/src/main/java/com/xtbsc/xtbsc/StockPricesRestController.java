@@ -1,13 +1,12 @@
 package com.xtbsc.xtbsc;
 
 
-import com.google.common.collect.ImmutableSet;
 import com.xtbsc.dataCollector.StockPricesApiClient;
 import com.xtbsc.dataCollector.dto.StockPricesTimeserieDto;
 import com.xtbsc.dataCollector.dto.StockPricesTimeseriesDto;
 import com.xtbsc.dbservice.entities.FinancialData;
 import com.xtbsc.xtbsc.dto.PricesDto;
-import com.xtbsc.xtbsc.mapper.CurrencyMapper;
+import com.xtbsc.xtbsc.mapper.PricesMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +37,7 @@ public class StockPricesRestController {
     public @ResponseBody ResponseEntity<PricesDto> getStockPricesData(@RequestParam String symbol) {
         List<FinancialData> financialData = this.stockPricesPersistance.getDataBySymbol(symbol);
         if (!financialData.isEmpty()) {
-            return ResponseEntity.ok(CurrencyMapper.toDtoFromStock(financialData));
+            return ResponseEntity.ok(PricesMapper.toDtoFromStock(financialData));
         }
         return ResponseEntity.notFound().build();
     }

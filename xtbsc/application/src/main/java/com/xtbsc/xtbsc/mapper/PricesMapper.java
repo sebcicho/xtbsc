@@ -7,7 +7,7 @@ import com.xtbsc.xtbsc.dto.PricesDto;
 import javax.annotation.Nullable;
 import java.util.*;
 
-public class CurrencyMapper {
+public class PricesMapper {
 
     @Nullable
     public static PricesDto toDtoFromCurrency(List<CurrencyData> data) {
@@ -32,6 +32,4 @@ public class CurrencyMapper {
         }
         return null;
     }
-
-
 }
