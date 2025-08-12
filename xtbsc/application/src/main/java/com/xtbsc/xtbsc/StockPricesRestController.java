@@ -51,7 +51,7 @@ public class StockPricesRestController {
         }
 
         TreeMap<String, Double> newValues = values.entrySet().stream()
-                .limit(10).collect(Collectors.toMap(
+                .limit(50).collect(Collectors.toMap(
                         (entry -> entry.getKey()),
                         (entry -> entry.getValue().getValue()),
                         (oldValue, newValue) -> oldValue,

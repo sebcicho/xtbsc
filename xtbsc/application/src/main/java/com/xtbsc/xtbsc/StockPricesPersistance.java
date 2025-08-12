@@ -28,7 +28,7 @@ public class StockPricesPersistance {
         Set<FinancialData> data = FinancialDataMapper.fromDto(values, symbol);
 
         data.forEach(entry -> {
-            if (financialDataRepository.existsByTimestampAndDate(entry.getTimestamp(), entry.getDate())) {
+            if (financialDataRepository.existsByTimestampAndDateAndSymbol(entry.getTimestamp(), entry.getDate(), entry.getSymbol())) {
                 LOGGER.info(String.format("can not store entry, already exists: %s, %s", entry.getDate(), entry.getSymbol()));
             } else {
                 LOGGER.info(String.format("storing entry: %s, %s", entry.getDate(), entry.getSymbol()));

@@ -32,8 +32,10 @@ public class ExchangeRateServiceRestController {
     @GetMapping("currency/data")
     public @ResponseBody ResponseEntity<CurrencyDto> getCurrencyData(@RequestParam String symbol) {
         List<CurrencyData> currencyData = this.currencyDataPersistance.getDataBySymbol(symbol);
-
-        return ResponseEntity.ok(CurrencyMapper.toDto(currencyData));
+        if (!currencyData.isEmpty()) {
+            return ResponseEntity.ok(CurrencyMapper.toDto(currencyData));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/internal/task/fetchcurrency")
