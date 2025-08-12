@@ -3,7 +3,7 @@ package com.xtbsc.xtbsc;
 import com.xtbsc.dataCollector.ExchangeRateApiClient;
 import com.xtbsc.dataCollector.dto.RatesDto;
 import com.xtbsc.dbservice.entities.CurrencyData;
-import com.xtbsc.xtbsc.dto.CurrencyDto;
+import com.xtbsc.xtbsc.dto.PricesDto;
 import com.xtbsc.xtbsc.mapper.CurrencyMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +30,10 @@ public class ExchangeRateServiceRestController {
     }
 
     @GetMapping("currency/data")
-    public @ResponseBody ResponseEntity<CurrencyDto> getCurrencyData(@RequestParam String symbol) {
+    public @ResponseBody ResponseEntity<PricesDto> getCurrencyData(@RequestParam String symbol) {
         List<CurrencyData> currencyData = this.currencyDataPersistance.getDataBySymbol(symbol);
         if (!currencyData.isEmpty()) {
-            return ResponseEntity.ok(CurrencyMapper.toDto(currencyData));
+            return ResponseEntity.ok(CurrencyMapper.toDtoFromCurrency(currencyData));
         }
         return ResponseEntity.notFound().build();
     }

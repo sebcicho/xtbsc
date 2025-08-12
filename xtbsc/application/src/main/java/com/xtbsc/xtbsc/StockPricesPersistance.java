@@ -2,12 +2,14 @@ package com.xtbsc.xtbsc;
 
 import com.xtbsc.dataCollector.mapper.FinancialDataMapper;
 import com.xtbsc.dbservice.FinancialDataRepository;
+import com.xtbsc.dbservice.entities.CurrencyData;
 import com.xtbsc.dbservice.entities.FinancialData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -35,5 +37,9 @@ public class StockPricesPersistance {
                 financialDataRepository.save(entry);
             }
         });
+    }
+
+    public List<FinancialData> getDataBySymbol(String symbol) {
+        return this.financialDataRepository.findBySymbolOrderByTimestamp(symbol);
     }
 }

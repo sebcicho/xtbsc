@@ -5,20 +5,16 @@ import com.google.common.collect.ImmutableSet;
 import com.xtbsc.dataCollector.StockPricesApiClient;
 import com.xtbsc.dataCollector.dto.StockPricesTimeserieDto;
 import com.xtbsc.dataCollector.dto.StockPricesTimeseriesDto;
-import com.xtbsc.dbservice.FinancialDataRepository;
+import com.xtbsc.dbservice.entities.FinancialData;
+import com.xtbsc.xtbsc.dto.PricesDto;
+import com.xtbsc.xtbsc.mapper.CurrencyMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,14 +26,21 @@ public class StockPricesRestController {
 
     private final StockPricesApiClient stockPricesApiClient;
 
-    private final Set<String> SUPPORTED_CURRENCIES = ImmutableSet.of("PLN", "EUR", "BTC", "GPB", "NOK", "CHF");
-
     @Autowired
     public StockPricesRestController(StockPricesPersistance stockPricesPersistance,
                                      StockPricesApiClient stockPricesApiClient) {
         this.stockPricesApiClient = stockPricesApiClient;
         this.stockPricesPersistance = stockPricesPersistance;
 
+    }
+
+    @GetMapping("stock/data")
+    public @ResponseBody ResponseEntity<PricesDto> getStockPricesData(@RequestParam String symbol) {
+        List<FinancialData> financialData = this.stockPricesPersistance.getDataBySymbol(symbol);
+        if (!financialData.isEmpty()) {
+            return ResponseEntity.ok(CurrencyMapper.toDtoFromStock(financialData));
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @PostMapping("/internal/task/fetchstock")

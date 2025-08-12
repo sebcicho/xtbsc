@@ -3,8 +3,8 @@ package com.xtbsc.dbservice.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "financial_data",  uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"timestamp", "date"})
+@Table(name = "financial_data", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"timestamp", "date", "symbol"})
 })
 public class FinancialData {
     @Id

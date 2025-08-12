@@ -1,14 +1,11 @@
 package com.xtbsc.dbservice.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Column;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "currency_data")
+@Table(name = "currency_data", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"timestamp", "symbolTo", "symbolFrom"})
+})
 public class CurrencyData {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

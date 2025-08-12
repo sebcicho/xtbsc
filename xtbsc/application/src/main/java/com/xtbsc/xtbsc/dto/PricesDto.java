@@ -2,9 +2,9 @@ package com.xtbsc.xtbsc.dto;
 
 import java.util.Map;
 
-public class CurrencyDto {
+public class PricesDto {
 
-    public CurrencyDto(
+    public PricesDto(
             String symbol,
             Map<Long, Double> values
     ) {
