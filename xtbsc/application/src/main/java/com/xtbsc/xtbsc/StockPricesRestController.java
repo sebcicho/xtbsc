@@ -57,7 +57,6 @@ public class StockPricesRestController {
     @PostMapping("/internal/stock/metadata")
     public @ResponseBody ResponseEntity<StockMetadataDto> postStockMetadata(@RequestBody StockMetadataDto stockMetadataDto) {
         LOGGER.info("Posting stock metadata");
-
         this.stockPricesPersistance.saveStockMetadata(stockMetadataDto);
         return ResponseEntity.ok(stockMetadataDto);
     }

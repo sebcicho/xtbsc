@@ -2,6 +2,7 @@ package com.xtbsc.dbservice.entities;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "stock_metadata")
@@ -15,6 +16,11 @@ public class StockMetadata {
 
     @Column(nullable = false)
     private String type;
+
+    @ColumnDefault("'N/A'")
+    @Column(nullable = false)
+    private String name;
+
 
     public Long getId() {
         return id;
@@ -38,5 +44,13 @@ public class StockMetadata {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

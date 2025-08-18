@@ -48,9 +48,10 @@ public class StockPricesPersistance {
 
     public void saveStockMetadata(StockMetadataDto stockMetadataDto) {
         Set<StockMetadata> data = new HashSet<>();
-        stockMetadataDto.getTypesMap().forEach((symbol, type) -> {
+        stockMetadataDto.getTypesMap().forEach((symbol, entry) -> {
             StockMetadata metaData = new StockMetadata();
-            metaData.setType(type);
+            metaData.setType(entry.getType());
+            metaData.setName(entry.getName());
             metaData.setSymbol(symbol);
             data.add(metaData);
         });

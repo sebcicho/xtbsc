@@ -3,17 +3,17 @@ package com.xtbsc.dataCollector.dto;
 import java.util.Map;
 
 public class StockMetadataDto {
-    private Map<String, String> typesMap;
+    private Map<String, StockMetadataEntryDto> typesMap;
 
-    public StockMetadataDto(Map<String, String> typesMap) {
+    public StockMetadataDto(Map<String, StockMetadataEntryDto> typesMap) {
         this.typesMap = typesMap;
     }
 
-    public Map<String, String> getTypesMap() {
+    public Map<String, StockMetadataEntryDto> getTypesMap() {
         return typesMap;
     }
 
-    public void setTypesMap(Map<String, String> typesMap) {
+    public void setTypesMap(Map<String, StockMetadataEntryDto> typesMap) {
         this.typesMap = typesMap;
     }
 }
