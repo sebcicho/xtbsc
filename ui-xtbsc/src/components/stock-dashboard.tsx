@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StockChart } from './stock-chart';
-import { Card, CardBody, CardHeader } from '@heroui/react';
+import { Card, CardBody, CardHeader, Spinner } from '@heroui/react';
 import { StockMetadata } from '../interfaces/stock-metadata';
 
 interface StockDashboardProps {
@@ -49,18 +49,25 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
                 <h2 className="text-2xl font-bold mb-8 text-foreground">{type} Dashboard</h2>
             </CardHeader>
             <CardBody>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {data.map((stock) => (
-                    <Card key={stock.symbol} className="col-span-1">
-                        <CardHeader>
-                            <h3 className="text-1xl font-semibold"> {stock.symbol} {stock.name}</h3>
-                        </CardHeader>
-                        <CardBody>
-                        <StockChart symbol={stock.symbol} />
-                        </CardBody>
-                    </Card>
-                    ))}
-                </div>
+                {loading ? (
+            <div className="flex justify-center items-center h-40">
+              <Spinner />
+            </div>
+          ) : (
+            // Display the dashboard content when isLoading is false
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {data.map((stock) => (
+                <Card key={stock.symbol} className="col-span-1">
+                  <CardHeader>
+                    <h3 className="text-1xl font-semibold"> {stock.symbol} {stock.name}</h3>
+                  </CardHeader>
+                  <CardBody>
+                    <StockChart symbol={stock.symbol} />
+                  </CardBody>
+                </Card>
+              ))}
+            </div>
+          )}
             </CardBody>
          </Card>
         
