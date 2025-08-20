@@ -26,9 +26,6 @@ export const StockChart: React.FC<StockChartProps> = ({ symbol }) => {
     .then(json => {
         const mappedData = mapStockData(json, symbol);
         setData(mappedData);
-        if (symbol === 'DT') {
-          console.log(calculateTrend(mappedData, symbol));
-        }
         setTrend(calculateTrend(mappedData, symbol));
         setColor(getColor(calculateTrend(mappedData, symbol)));
         setLoading(false);
