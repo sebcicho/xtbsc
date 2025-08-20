@@ -11,7 +11,7 @@ public class PricesMapper {
 
     @Nullable
     public static PricesDto toDtoFromCurrency(List<CurrencyData> data) {
-        Map<Long, Double> valuesMap = new TreeMap<>(Collections.reverseOrder());
+        Map<Long, Double> valuesMap = new TreeMap<>();
         data.forEach(currencyData -> valuesMap.put(currencyData.getTimestamp(), currencyData.getValue()));
 
         Optional<CurrencyData> optionalData = data.stream().findAny();
@@ -23,7 +23,7 @@ public class PricesMapper {
 
     @Nullable
     public static PricesDto toDtoFromStock(List<FinancialData> data) {
-        Map<Long, Double> valuesMap = new TreeMap<>(Collections.reverseOrder());
+        Map<Long, Double> valuesMap = new TreeMap<>();
         data.forEach(financialData -> valuesMap.put(financialData.getTimestamp(), financialData.getValue()));
 
         Optional<FinancialData> optionalData = data.stream().findAny();

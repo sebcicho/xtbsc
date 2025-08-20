@@ -80,6 +80,5 @@ public class StockPricesRestController {
                 ));
         this.stockPricesPersistance.saveFinancialData(newValues, symbol);
         return ResponseEntity.ok(newValues);
-
     }
 }
