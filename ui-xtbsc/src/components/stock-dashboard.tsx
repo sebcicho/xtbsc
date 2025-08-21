@@ -58,14 +58,9 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
             // Display the dashboard content when isLoading is false
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {data.map((stock) => (
-                <Card key={stock.symbol} className="col-span-1">
-                  <CardHeader>
-                    <h3 className="text-1xl font-semibold"> {stock.symbol} {stock.name}</h3>
-                  </CardHeader>
-                  <CardBody>
-                    <FinancialChart symbol={stock.symbol} chartType={ChartType.STOCK} />
-                  </CardBody>
-                </Card>
+
+                <FinancialChart symbol={stock.symbol} chartType={ChartType.STOCK} title={`${stock.symbol} ${stock.name}`}/>
+
               ))}
             </div>
           )}

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import { mapStockData } from '../mappers/stock-data.mapper';
-import { Spinner } from '@heroui/react';
+import { Card, CardBody, CardHeader, Spinner } from '@heroui/react';
 import { DataPoint } from '../interfaces/data-point';
 import { calculateTrend } from '../utils/trend-calculator';
 import { ChartType, Trend } from '../interfaces/enums';
@@ -10,9 +10,10 @@ import { getColor } from '../utils/trend-color-util';
 interface FinancialChartProps {
   symbol: string;
   chartType: ChartType;
+  title: string
 }
 
-export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartType }) => {
+export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartType, title }) => {
 
   const [data, setData] = useState<Array<DataPoint>>([]);
   const [trend, setTrend] = useState<Trend>();
@@ -37,8 +38,13 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
 }, []);
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      {loading ? (
+    <Card key={symbol} className="col-span-1">
+      <CardHeader>
+        <h3 className="text-1xl font-semibold"> {title}</h3>
+      </CardHeader>
+      <CardBody>
+        <ResponsiveContainer width="100%" height={400}>
+          {loading ? (
             <div className="flex justify-center items-center h-40">
               <Spinner />
             </div>
@@ -59,7 +65,8 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
               <Area type="monotone" dataKey={symbol} stroke={color} fillOpacity={1} fill={`url(#color-${symbol})`} />
             </AreaChart>
           )}
-      
-    </ResponsiveContainer>
+        </ResponsiveContainer>
+      </CardBody>
+    </Card>
   );
 };
