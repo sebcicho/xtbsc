@@ -1,6 +1,5 @@
 package com.xtbsc.xtbsc;
 
-import com.google.common.collect.ImmutableSet;
 import com.xtbsc.dataCollector.dto.RatesDto;
 import com.xtbsc.dataCollector.mapper.RatesMapper;
 import com.xtbsc.dbservice.CurrencyDataRepository;
@@ -13,14 +12,14 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Set;
 
+import static com.xtbsc.dataCollector.constants.Constants.SUPPORTED_CURRENCIES;
+
 @Service
 public class CurrencyDataPersistance {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CurrencyDataPersistance.class);
 
     private final CurrencyDataRepository currencyDataRepository;
-
-    private final Set<String> SUPPORTED_CURRENCIES = ImmutableSet.of("PLN", "EUR", "BTC", "GPB", "NOK", "CHF");
 
     @Autowired
     public CurrencyDataPersistance(CurrencyDataRepository currencyDataRepository) {

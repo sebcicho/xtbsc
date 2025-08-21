@@ -1,40 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { FinancialChart } from './financial-chart';
 import { Card, CardBody, CardHeader, Spinner } from '@heroui/react';
-import { StockMetadata } from '../interfaces/stock-metadata';
 import { ChartType } from '../interfaces/enums';
 
-interface StockDashboardProps {
-  type: string;
+interface CurrencyDashboardProps {
   limit: number;
 }
 
+export const CurrencyDashboard: React.FC<CurrencyDashboardProps> = ({limit}) => {
 
-export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => {
-
-  const [data, setData] = useState<Array<StockMetadata>>([]);
+  const [data, setData] = useState<Array<string>>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-  fetch(`http://localhost:8080/stock/metadata`)
+  fetch(`http://localhost:8080/currency/metadata`)
     .then(response => response.json())
     .then(json => {
-        const typesMap = json["typesMap"]; 
-        const tickersFiltered: StockMetadata[] = [];
-      // Iterate over the keys of the object
-      Object.keys(typesMap).forEach(ticker => {
-        // Access the stock data using the ticker
-        const stockData = typesMap[ticker];
-        if(stockData.type === type) {
-            tickersFiltered.push({
-                symbol: ticker,
-                type: stockData.type,
-                name: stockData.name,
-            });
-        }
-      });
-        setData(tickersFiltered.slice(0, limit));
+        const currencies = json; 
+        setData(currencies.slice(0, limit));
         setLoading(false);
       })
     .catch(error => {
@@ -47,7 +31,7 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
     <div>
          <Card>
             <CardHeader>
-                <h2 className="text-2xl font-bold mb-8 text-foreground">{type} Dashboard</h2>
+                <h2 className="text-2xl font-bold mb-8 text-foreground">Currencies Dashboard</h2>
             </CardHeader>
             <CardBody>
                 {loading ? (
@@ -57,13 +41,13 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
           ) : (
             // Display the dashboard content when isLoading is false
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {data.map((stock) => (
-                <Card key={stock.symbol} className="col-span-1">
+              {data.map((currency) => (
+                <Card key={currency} className="col-span-1">
                   <CardHeader>
-                    <h3 className="text-1xl font-semibold"> {stock.symbol} {stock.name}</h3>
+                    <h3 className="text-1xl font-semibold"> {currency} to USD</h3>
                   </CardHeader>
                   <CardBody>
-                    <FinancialChart symbol={stock.symbol} chartType={ChartType.STOCK} />
+                    <FinancialChart symbol={currency} chartType={ChartType.CURRENCY}/>
                   </CardBody>
                 </Card>
               ))}
@@ -75,7 +59,3 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
     </div>
   );
 };
-
-
-
-

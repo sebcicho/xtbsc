@@ -12,7 +12,7 @@ public class PricesMapper {
     @Nullable
     public static PricesDto toDtoFromCurrency(List<CurrencyData> data) {
         Map<Long, Double> valuesMap = new TreeMap<>();
-        data.forEach(currencyData -> valuesMap.put(currencyData.getTimestamp(), currencyData.getValue()));
+        data.forEach(currencyData -> valuesMap.put(currencyData.getTimestamp() * 1000, currencyData.getValue()));
 
         Optional<CurrencyData> optionalData = data.stream().findAny();
         if(optionalData.isPresent()) {

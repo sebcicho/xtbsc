@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+
+import static com.xtbsc.dataCollector.constants.Constants.SUPPORTED_CURRENCIES;
 
 
 @RestController
@@ -37,6 +40,13 @@ public class ExchangeRateServiceRestController {
         }
         return ResponseEntity.notFound().build();
     }
+
+    @GetMapping("currency/metadata")
+    public @ResponseBody ResponseEntity<Set<String>> getStockPricesData() {
+
+        return ResponseEntity.ok(SUPPORTED_CURRENCIES);
+    }
+
 
     @PostMapping("/internal/task/fetchcurrency")
     public @ResponseBody ResponseEntity<RatesDto> fetchCurrencyData (@RequestParam(required = false) String date) {

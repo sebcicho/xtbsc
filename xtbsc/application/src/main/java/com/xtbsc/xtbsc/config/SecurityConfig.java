@@ -20,7 +20,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Enable CORS with a specific source
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/stock/**").permitAll()
+                        .requestMatchers("/stock/**", "/currency/**", "/internal/**").permitAll()
                         .anyRequest().authenticated()
                 );
         return http.build();

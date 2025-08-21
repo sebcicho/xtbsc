@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { StockDashboard } from './components/stock-dashboard';
+import { CurrencyDashboard } from './components/currency-dashboard';
 
 export default function App() {
   return (
@@ -12,6 +13,9 @@ export default function App() {
         </div>
         <div className="mb-16">
           <StockDashboard type='ST' limit={4}></StockDashboard>
+        </div>
+       <div className="mb-16">
+          <CurrencyDashboard limit={4}></CurrencyDashboard>
         </div>
        
       </div>

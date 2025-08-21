@@ -3,3 +3,8 @@ export enum Trend {
     NEGATIVE,
     EQUAL,
 }
+
+export enum ChartType {
+    CURRENCY,
+    STOCK,
+}

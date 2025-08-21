@@ -4,15 +4,15 @@ import { mapStockData } from '../mappers/stock-data.mapper';
 import { Spinner } from '@heroui/react';
 import { DataPoint } from '../interfaces/data-point';
 import { calculateTrend } from '../utils/trend-calculator';
-import { Trend } from '../interfaces/enums';
+import { ChartType, Trend } from '../interfaces/enums';
 import { getColor } from '../utils/trend-color-util';
 
-
-interface StockChartProps {
+interface FinancialChartProps {
   symbol: string;
+  chartType: ChartType;
 }
 
-export const StockChart: React.FC<StockChartProps> = ({ symbol }) => {
+export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartType }) => {
 
   const [data, setData] = useState<Array<DataPoint>>([]);
   const [trend, setTrend] = useState<Trend>();
@@ -21,7 +21,7 @@ export const StockChart: React.FC<StockChartProps> = ({ symbol }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-  fetch(`http://localhost:8080/stock/data?symbol=${symbol}`)
+  fetch(`http://localhost:8080/${chartType === ChartType.STOCK ? 'stock' : 'currency'}/data?symbol=${symbol}`)
     .then(response => response.json())
     .then(json => {
         const mappedData = mapStockData(json, symbol);
