@@ -54,7 +54,6 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
               <XAxis dataKey="date" stroke="#888888" />
               <YAxis stroke="#888888" />
               <Tooltip contentStyle={{ backgroundColor: '#333', border: 'none' }} />
-              <Legend/>
               <defs>
                 <linearGradient id={`color-${symbol}`} x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor={color} stopOpacity={0.8}/>
