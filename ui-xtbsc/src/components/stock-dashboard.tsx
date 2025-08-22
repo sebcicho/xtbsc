@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FinancialChart } from './financial-chart';
-import { Card, CardBody, CardHeader, Spinner } from '@heroui/react';
+import { Card, CardBody, CardHeader, Input, Spinner } from '@heroui/react';
 import { StockMetadata } from '../interfaces/stock-metadata';
 import { ChartType } from '../interfaces/enums';
 
@@ -13,8 +13,28 @@ interface StockDashboardProps {
 export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => {
 
   const [data, setData] = useState<Array<StockMetadata>>([]);
+  const [filteredData, setFilteredData] = useState<Array<StockMetadata>>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchValue, setSearchValue] = useState('');
+
+  
+  const handleInputChange = (event) => {
+    setSearchValue(event.target.value);
+    filterData(event.target.value);
+  };
+
+  const filterData = (search?: string) => {
+    console.log('search value: ', searchValue);
+    if(search && search !== '') {
+      const filData = data.filter((entry) => entry.name.toLowerCase().includes(search.toLowerCase()));
+      setFilteredData(filData)
+      console.log('setting filtered: ', filData);
+    } else {
+      console.log('setting all');
+      setFilteredData(data);
+    }
+  }
 
   useEffect(() => {
   fetch(`http://localhost:8080/stock/metadata`)
@@ -26,6 +46,7 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
       Object.keys(typesMap).forEach(ticker => {
         // Access the stock data using the ticker
         const stockData = typesMap[ticker];
+        
         if(stockData.type === type) {
             tickersFiltered.push({
                 symbol: ticker,
@@ -34,7 +55,9 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
             });
         }
       });
-        setData(tickersFiltered.slice(0, limit));
+        const obtainedData = tickersFiltered.slice(0, limit);
+        setData(obtainedData);
+        setFilteredData(obtainedData);
         setLoading(false);
       })
     .catch(error => {
@@ -47,7 +70,10 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
     <div>
          <Card>
             <CardHeader>
+              <div className='flex flex-col w-full'>
                 <h2 className="text-2xl font-bold mb-8 text-foreground">{type} Dashboard</h2>
+                <Input name='search' placeholder='Search 🔎︎' onChange={handleInputChange} ></Input>
+              </div>
             </CardHeader>
             <CardBody>
                 {loading ? (
@@ -57,7 +83,7 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
           ) : (
             // Display the dashboard content when isLoading is false
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {data.map((stock) => (
+              {filteredData.map((stock) => (
 
                 <FinancialChart symbol={stock.symbol} chartType={ChartType.STOCK} title={`${stock.symbol} ${stock.name}`}/>
 

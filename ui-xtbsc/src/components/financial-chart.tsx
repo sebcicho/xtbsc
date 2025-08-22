@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { mapStockData } from '../mappers/stock-data.mapper';
 import { Card, CardBody, CardHeader, Spinner } from '@heroui/react';
 import { DataPoint } from '../interfaces/data-point';
@@ -24,9 +24,13 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-  fetch(`http://localhost:8080/${chartType === ChartType.STOCK ? 'stock' : 'currency'}/data?symbol=${symbol}`)
-    .then(response => response.json())
-    .then(json => {
+    // Reset state before fetching new data
+    setLoading(true);
+    setData([]);
+
+    fetch(`http://localhost:8080/${chartType === ChartType.STOCK ? 'stock' : 'currency'}/data?symbol=${symbol}`)
+      .then(response => response.json())
+      .then(json => {
         const mappedData = mapStockData(json, symbol);
         setData(mappedData);
         setTrend(calculateTrend(mappedData, symbol));
@@ -34,11 +38,12 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
         setPercentage(calculatePercentage(mappedData, symbol));
         setLoading(false);
       })
-    .catch(error => {
-      console.error('There was an error!', error);
-      setLoading(false);
-    });
-}, []);
+      .catch(error => {
+        console.error('There was an error!', error);
+        setError('Failed to fetch data');
+        setLoading(false);
+      });
+  }, [symbol, chartType]); // FIX: Add symbol and chartType to the dependency array
 
   return (
     <Card key={symbol} className="col-span-1">
@@ -52,6 +57,10 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
             <div className="flex justify-center items-center h-40">
               <Spinner />
             </div>
+          ) : error ? (
+            <div className="flex justify-center items-center h-40 text-red-500">
+              {error}
+            </div>
           ) : (
             <AreaChart data={data}>
               <CartesianGrid strokeDasharray="3 3" stroke="#2c2c2c" />
@@ -63,7 +72,6 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
                   <stop offset="5%" stopColor={color} stopOpacity={0.8}/>
                   <stop offset="95%" stopColor={color} stopOpacity={0}/>
                 </linearGradient>
-
               </defs>
               <Area type="monotone" dataKey={symbol} stroke={color} fillOpacity={1} fill={`url(#color-${symbol})`} />
             </AreaChart>
