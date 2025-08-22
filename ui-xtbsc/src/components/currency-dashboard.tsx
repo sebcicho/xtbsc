@@ -39,7 +39,6 @@ export const CurrencyDashboard: React.FC<CurrencyDashboardProps> = ({limit}) => 
               <Spinner />
             </div>
           ) : (
-            // Display the dashboard content when isLoading is false
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {data.map((currency) => (
                     <FinancialChart symbol={currency} chartType={ChartType.CURRENCY} title={`${currency} to USD`}/>

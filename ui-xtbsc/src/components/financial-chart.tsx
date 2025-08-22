@@ -3,9 +3,10 @@ import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tool
 import { mapStockData } from '../mappers/stock-data.mapper';
 import { Card, CardBody, CardHeader, Spinner } from '@heroui/react';
 import { DataPoint } from '../interfaces/data-point';
-import { calculateTrend } from '../utils/trend-calculator';
+import { calculatePercentage, calculateTrend } from '../utils/trend-calculator';
 import { ChartType, Trend } from '../interfaces/enums';
 import { getColor } from '../utils/trend-color-util';
+import { TrendIndicator } from './trend-indicator';
 
 interface FinancialChartProps {
   symbol: string;
@@ -18,6 +19,7 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
   const [data, setData] = useState<Array<DataPoint>>([]);
   const [trend, setTrend] = useState<Trend>();
   const [color, setColor] = useState<string>();
+  const [percentage, setPercentage] = useState<number>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -29,6 +31,7 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
         setData(mappedData);
         setTrend(calculateTrend(mappedData, symbol));
         setColor(getColor(calculateTrend(mappedData, symbol)));
+        setPercentage(calculatePercentage(mappedData, symbol));
         setLoading(false);
       })
     .catch(error => {
@@ -40,7 +43,8 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
   return (
     <Card key={symbol} className="col-span-1">
       <CardHeader>
-        <h3 className="text-1xl font-semibold"> {title}</h3>
+        <h3 className="text-1xl font-semibold mr-2">{title}</h3>
+        <TrendIndicator value={percentage} trend={trend} color={color}></TrendIndicator>
       </CardHeader>
       <CardBody>
         <ResponsiveContainer width="100%" height={400}>
