@@ -24,7 +24,6 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Reset state before fetching new data
     setLoading(true);
     setData([]);
 
@@ -43,7 +42,7 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
         setError('Failed to fetch data');
         setLoading(false);
       });
-  }, [symbol, chartType]); // FIX: Add symbol and chartType to the dependency array
+  }, [symbol, chartType]);
 
   return (
     <Card key={symbol} className="col-span-1">
