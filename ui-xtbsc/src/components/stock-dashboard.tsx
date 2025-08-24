@@ -27,12 +27,15 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
   const filterData = (search?: string) => {
     console.log('search value: ', searchValue);
     if(search && search !== '') {
-      const filData = data.filter((entry) => entry.name.toLowerCase().includes(search.toLowerCase()));
+      const filData = data.filter((entry) => 
+        entry.name.toLowerCase().includes(search.toLowerCase()) || 
+        entry.symbol.toLowerCase().includes(search.toLowerCase()));
+      
       setFilteredData(filData)
-      console.log('setting filtered: ', filData);
+      console.log('setting filtered: ', filData.slice(0, limit));
     } else {
       console.log('setting all');
-      setFilteredData(data);
+      setFilteredData(data.slice(0, limit));
     }
   }
 
@@ -42,9 +45,7 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
     .then(json => {
         const typesMap = json["typesMap"]; 
         const tickersFiltered: StockMetadata[] = [];
-      // Iterate over the keys of the object
       Object.keys(typesMap).forEach(ticker => {
-        // Access the stock data using the ticker
         const stockData = typesMap[ticker];
         
         if(stockData.type === type) {
@@ -55,9 +56,9 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
             });
         }
       });
-        const obtainedData = tickersFiltered.slice(0, limit);
+        const obtainedData = tickersFiltered;
         setData(obtainedData);
-        setFilteredData(obtainedData);
+        setFilteredData(obtainedData.slice(0, limit));
         setLoading(false);
       })
     .catch(error => {
