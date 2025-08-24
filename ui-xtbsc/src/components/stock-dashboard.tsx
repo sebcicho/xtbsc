@@ -5,6 +5,7 @@ import { StockMetadata } from '../interfaces/stock-metadata';
 import { ChartType } from '../interfaces/enums';
 import { useDispatch } from 'react-redux';
 import { setStockMetadata } from '../state/metadata-reducer';
+import { useNavigate } from 'react-router-dom';
 
 interface StockDashboardProps {
   type: string;
@@ -14,6 +15,7 @@ interface StockDashboardProps {
 
 export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [data, setData] = useState<Array<StockMetadata>>([]);
   const [filteredData, setFilteredData] = useState<Array<StockMetadata>>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +29,6 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
   };
 
   const filterData = (search?: string) => {
-    console.log('search value: ', searchValue);
     if(search && search !== '') {
       const filData = data.filter((entry) => 
         entry.name.toLowerCase().includes(search.toLowerCase()) || 
@@ -47,17 +48,17 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
     .then(json => {
         const typesMap = json["typesMap"]; 
         const tickersFiltered: StockMetadata[] = [];
-      Object.keys(typesMap).forEach(ticker => {
-        const stockData = typesMap[ticker];
-        
-        if(stockData.type === type) {
-            tickersFiltered.push({
-                symbol: ticker,
-                type: stockData.type,
-                name: stockData.name,
-            });
-        }
-      });
+        Object.keys(typesMap).forEach(ticker => {
+          const stockData = typesMap[ticker];
+          
+          if(stockData.type === type) {
+              tickersFiltered.push({
+                  symbol: ticker,
+                  type: stockData.type,
+                  name: stockData.name,
+              });
+          }
+        });
         const obtainedData = tickersFiltered;
         dispatch(setStockMetadata(obtainedData));
         setData(obtainedData);
@@ -75,7 +76,7 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
          <Card>
             <CardHeader>
               <div className='flex flex-col w-full'>
-                <h2 className="text-2xl font-bold mb-8 text-foreground">{type} Dashboard</h2>
+                <h2 className="text-2xl font-bold mb-8 text-foreground">{type === 'ETF' ? 'ETF' : 'Stock'} Dashboard</h2>
                 <Input name='search' placeholder='Search 🔎︎' onChange={handleInputChange} ></Input>
               </div>
             </CardHeader>
@@ -88,9 +89,14 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
             // Display the dashboard content when isLoading is false
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {filteredData.map((stock) => (
-
+                <div
+                  key={stock.symbol}
+                  className="cursor-pointer"
+                  onClick={() => navigate(`/asset/${stock.symbol}`)}
+                >
                 <FinancialChart symbol={stock.symbol} chartType={ChartType.STOCK} title={`${stock.symbol} ${stock.name}`}/>
 
+              </div>
               ))}
             </div>
           )}

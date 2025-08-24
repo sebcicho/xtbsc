@@ -16,7 +16,11 @@ export const metadataSlice = createSlice({
   initialState,
   reducers: {
     setStockMetadata: (state, action: PayloadAction<StockMetadata[]>) => {
-      state.stockMetadata = action.payload;
+        const merged = [...state.stockMetadata, ...action.payload];
+        const unique = Array.from(
+            new Map(merged.map(item => [item.symbol, item])).values()
+        );
+        state.stockMetadata = unique;
     },
     setCurrencyMetadata: (state, action: PayloadAction<string[]>) => {
       state.currencyMetadata = action.payload;

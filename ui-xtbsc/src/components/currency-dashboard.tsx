@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { FinancialChart } from './financial-chart';
 import { Card, CardBody, CardHeader, Input, Spinner } from '@heroui/react';
 import { ChartType } from '../interfaces/enums';
+import { useNavigate } from 'react-router-dom';
+import { setCurrencyMetadata } from '../state/metadata-reducer';
+import { useDispatch } from 'react-redux';
 
 interface CurrencyDashboardProps {
   limit: number;
 }
 
 export const CurrencyDashboard: React.FC<CurrencyDashboardProps> = ({limit}) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [data, setData] = useState<Array<string>>([]);
   const [loading, setLoading] = useState(true);
@@ -21,7 +26,6 @@ export const CurrencyDashboard: React.FC<CurrencyDashboardProps> = ({limit}) => 
   };
 
   const filterData = (search?: string) => {
-    console.log('search value: ', searchValue);
     if(search && search !== '') {
       const filData = data.filter((entry) => entry.toLowerCase().includes(search.toLowerCase()));
       setFilteredData(filData.slice(0, limit))
@@ -38,6 +42,7 @@ export const CurrencyDashboard: React.FC<CurrencyDashboardProps> = ({limit}) => 
         const obtainedData = currencies;
         setData(obtainedData);
         setFilteredData(obtainedData.slice(0, limit));
+        dispatch(setCurrencyMetadata(obtainedData));
         setLoading(false);
       })
     .catch(error => {
@@ -63,7 +68,9 @@ export const CurrencyDashboard: React.FC<CurrencyDashboardProps> = ({limit}) => 
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {filteredData.map((currency) => (
+                <div key={currency} className="cursor-pointer" onClick={() => navigate(`/asset/${currency}`)}>
                     <FinancialChart symbol={currency} chartType={ChartType.CURRENCY} title={`${currency} to USD`}/>
+              </div>
               ))}
             </div>
           )}

@@ -3,6 +3,7 @@ import { combineReducers } from 'redux';
 import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import metadataReducer from './metadata-reducer';
+import logger from 'redux-logger'; 
 
 const rootReducer = combineReducers({
   metadata: metadataReducer,
@@ -17,6 +18,10 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }).concat(logger),
 });
 
 export const persistor = persistStore(store);
