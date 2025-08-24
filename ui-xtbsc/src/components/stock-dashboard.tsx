@@ -3,6 +3,8 @@ import { FinancialChart } from './financial-chart';
 import { Card, CardBody, CardHeader, Input, Spinner } from '@heroui/react';
 import { StockMetadata } from '../interfaces/stock-metadata';
 import { ChartType } from '../interfaces/enums';
+import { useDispatch } from 'react-redux';
+import { setStockMetadata } from '../state/metadata-reducer';
 
 interface StockDashboardProps {
   type: string;
@@ -11,7 +13,7 @@ interface StockDashboardProps {
 
 
 export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => {
-
+  const dispatch = useDispatch();
   const [data, setData] = useState<Array<StockMetadata>>([]);
   const [filteredData, setFilteredData] = useState<Array<StockMetadata>>([]);
   const [loading, setLoading] = useState(true);
@@ -57,6 +59,7 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
         }
       });
         const obtainedData = tickersFiltered;
+        dispatch(setStockMetadata(obtainedData));
         setData(obtainedData);
         setFilteredData(obtainedData.slice(0, limit));
         setLoading(false);

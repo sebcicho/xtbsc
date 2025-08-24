@@ -1,26 +1,34 @@
 import { useParams } from "react-router-dom";
-import { ChartType } from "../interfaces/enums";
 import { FinancialChart } from "./financial-chart";
 import { Spinner } from "@heroui/react";
+import { useSelector } from "react-redux";
+import { RootState } from "../state/redux-configurator";
+import { ChartType } from "../interfaces/enums";
 
 
 export const AssetPage: React.FC = () => {
   // Assumes your route is like /asset/:symbol/:type
-  const { symbol, type } = useParams<{ symbol: string; type: string }>();
+  const { symbol } = useParams<{ symbol: string; }>();
+  const stockMetadata = useSelector((state: RootState) => state.metadata.stockMetadata);
+  const currencyMetadata = useSelector((state: RootState) => state.metadata.currencyMetadata);
 
-  // Map string to ChartType enum
-  const chartType = type === 'stock' ? ChartType.STOCK : ChartType.CURRENCY;
+  const stockAssetFromState = {
+    ...stockMetadata.find(item => item.symbol === symbol)
+  }
+
+  const currencyAsset = currencyMetadata.find(item => item === symbol);
+
+  const chartType = stockAssetFromState ? ChartType.STOCK : ChartType.CURRENCY;
 
   return (
-    <div className="max-w-4xl mx-auto py-8">
+    <div className="min-h-screen w-full bg-background">
     {
         symbol ? <FinancialChart
             symbol={symbol}
             chartType={chartType}
-            title={`${symbol} ${chartType === ChartType.STOCK ? 'Stock' : 'Currency'} Chart`}
         /> : (
             <div className="flex justify-center items-center h-40">
-                <Spinner />
+                <Spinner/>
             </div>
         )
     }

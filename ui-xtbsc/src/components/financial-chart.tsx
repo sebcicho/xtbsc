@@ -11,7 +11,7 @@ import { TrendIndicator } from './trend-indicator';
 interface FinancialChartProps {
   symbol: string;
   chartType: ChartType;
-  title: string
+  title?: string
 }
 
 export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartType, title }) => {
