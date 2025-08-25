@@ -10,7 +10,6 @@ import { StockMetadata } from "../interfaces/stock-metadata";
 
 
 export const AssetPage: React.FC = () => {
-  // Assumes your route is like /asset/:symbol/:type
   const { symbol } = useParams<{ symbol: string; }>();
   const stockMetadata = useSelector((state: RootState) => state.metadata.stockMetadata);
   const currencyMetadata = useSelector((state: RootState) => state.metadata.currencyMetadata);
@@ -25,9 +24,12 @@ export const AssetPage: React.FC = () => {
   const chartType = stockAssetFromState ? ChartType.STOCK : ChartType.CURRENCY;
   
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [symbol]);
+
+  useEffect(() => {
     if (!stockAssetFromState && !currencyAsset && symbol) {
       setLoading(true);
-      // Fetch both stock and currency metadata in parallel
       Promise.all([
         fetch(`http://localhost:8080/stock/metadata`).then(res => res.json()),
         fetch(`http://localhost:8080/currency/metadata`).then(res => res.json())
@@ -61,9 +63,15 @@ export const AssetPage: React.FC = () => {
   return (
     <div className="min-h-screen w-full bg-background">
     {
-        symbol && !loading?
+        symbol && !loading && (stockAssetFromState || currencyAsset)?
         <div>
-          <h2 className="text-2xl font-bold mb-8 text-foreground">{stockAssetFromState?.type} {stockAssetFromState?.name ? stockAssetFromState.name : ""} {currencyAsset ? `${currencyAsset} currency to USD ` : ""} Overview</h2>
+          <h2 className="text-2xl font-bold mb-8 text-foreground">
+            {stockAssetFromState
+              ? `${stockAssetFromState.name || stockAssetFromState.symbol || symbol} `
+              : currencyAsset
+              ? `${currencyAsset} currency to USD `
+              : symbol
+            } Overview</h2>
           <FinancialChart
               symbol={symbol}
               chartType={chartType}

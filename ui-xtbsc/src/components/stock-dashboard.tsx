@@ -86,7 +86,6 @@ export const StockDashboard: React.FC<StockDashboardProps> = ({type, limit}) => 
               <Spinner />
             </div>
           ) : (
-            // Display the dashboard content when isLoading is false
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {filteredData.map((stock) => (
                 <div
