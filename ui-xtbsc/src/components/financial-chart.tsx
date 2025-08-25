@@ -7,14 +7,18 @@ import { calculatePercentage, calculateTrend } from '../utils/trend-calculator';
 import { ChartType, Trend } from '../interfaces/enums';
 import { getColor } from '../utils/trend-color-util';
 import { TrendIndicator } from './trend-indicator';
+import { useDispatch } from 'react-redux';
+import { setCurrentData } from '../state/current-data-reducer';
 
 interface FinancialChartProps {
   symbol: string;
   chartType: ChartType;
   title?: string
+  soloMode?: boolean;
 }
 
-export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartType, title }) => {
+export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartType, title, soloMode }) => {
+  const dispatch = useDispatch();
 
   const [data, setData] = useState<Array<DataPoint>>([]);
   const [trend, setTrend] = useState<Trend>();
@@ -36,6 +40,9 @@ export const FinancialChart: React.FC<FinancialChartProps> = ({ symbol, chartTyp
         setColor(getColor(calculateTrend(mappedData, symbol)));
         setPercentage(calculatePercentage(mappedData, symbol));
         setLoading(false);
+        if(soloMode) {
+          dispatch(setCurrentData(mappedData));
+        }
       })
       .catch(error => {
         console.error('There was an error!', error);

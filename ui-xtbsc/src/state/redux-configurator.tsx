@@ -4,9 +4,11 @@ import { persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import metadataReducer from './metadata-reducer';
 import logger from 'redux-logger'; 
+import currentDataReducer from './current-data-reducer';
 
 const rootReducer = combineReducers({
   metadata: metadataReducer,
+  currentData: currentDataReducer,
 });
 
 const persistConfig = {

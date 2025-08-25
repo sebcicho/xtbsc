@@ -7,12 +7,14 @@ import { ChartType } from "../interfaces/enums";
 import { useEffect, useState } from "react";
 import { setCurrencyMetadata, setStockMetadata } from "../state/metadata-reducer";
 import { StockMetadata } from "../interfaces/stock-metadata";
+import { AssetInfo } from "./asset-info";
 
 
 export const AssetPage: React.FC = () => {
   const { symbol } = useParams<{ symbol: string; }>();
   const stockMetadata = useSelector((state: RootState) => state.metadata.stockMetadata);
   const currencyMetadata = useSelector((state: RootState) => state.metadata.currencyMetadata);
+  const currentData = useSelector((state: RootState) => state.currentData.currentData);
   const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
@@ -64,17 +66,21 @@ export const AssetPage: React.FC = () => {
     <div className="min-h-screen w-full bg-background">
     {
         symbol && !loading && (stockAssetFromState || currencyAsset)?
-        <div>
+        <div className="m-8">
           <h2 className="text-2xl font-bold mb-8 text-foreground">
             {stockAssetFromState
-              ? `${stockAssetFromState.name || stockAssetFromState.symbol || symbol} `
+              ? `${stockAssetFromState.symbol || symbol} `
               : currencyAsset
               ? `${currencyAsset} currency to USD `
               : symbol
             } Overview</h2>
-          <FinancialChart
+            <div className="mb-8">
+              <AssetInfo currentData={currentData} name={stockAssetFromState?.name || symbol} symbol={stockAssetFromState?.symbol || symbol} type={stockAssetFromState?.type || 'Currency'}/>
+            </div>
+            <FinancialChart
               symbol={symbol}
               chartType={chartType}
+              soloMode={true}
           /> 
         </div>
         : (
