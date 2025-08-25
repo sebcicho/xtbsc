@@ -1,3 +1,4 @@
+import { currenciesMap } from "../interfaces/currencies-map";
 import { DataPoint } from "../interfaces/data-point";
 
 interface AssetInfoProps {
@@ -27,13 +28,13 @@ export const AssetInfo: React.FC<AssetInfoProps> = ({ currentData, name, symbol,
       <p className="font-semibold mb-1">Name: <span className="font-normal">{name}</span></p>
       <p className="font-semibold mb-1">Type: <span className="font-normal">{type === 'ST' ? 'Stock' : type}</span></p>
       <p className="font-semibold mb-1">
-        Current Price: <span className="font-bold">{isNaN(currentPrice) ? '-' : `${currentPrice} $`}</span>
+        Current Price: <span className="font-bold">{isNaN(currentPrice) ? '-' : `${currentPrice} ${type==='Currency' ? currenciesMap[symbol] ?? symbol : '$'}`}</span>
       </p>
       <p className="font-semibold mb-1">
-        Time high: <span style={{ color: '#45be86ff' }} className="font-bold">{isFinite(high) ? `${high} $` : '-'}</span>
+        Time high: <span style={{ color: '#45be86ff' }} className="font-bold">{isFinite(high) ? `${high} ${type==='Currency' ? currenciesMap[symbol] ?? symbol : '$'}` : '-'}</span>
       </p>
       <p className="font-semibold mb-1">
-        Time low: <span style={{ color: '#af366fff' }} className="font-bold">{isFinite(low) ? `${low} $` : '-'}</span>
+        Time low: <span style={{ color: '#af366fff' }} className="font-bold">{isFinite(low) ? `${low} ${type==='Currency' ? currenciesMap[symbol] ?? symbol : '$'}` : '-'}</span>
       </p>
     </div>
   );
