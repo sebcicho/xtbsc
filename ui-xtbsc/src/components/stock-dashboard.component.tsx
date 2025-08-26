@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FinancialChart } from './financial-chart';
+import { FinancialChart } from './financial-chart.component';
 import { Card, CardBody, CardHeader, Input, Spinner } from '@heroui/react';
 import { StockMetadata } from '../interfaces/stock-metadata';
 import { ChartType } from '../interfaces/enums';

@@ -6,7 +6,7 @@ import { DataPoint } from '../interfaces/data-point';
 import { calculatePercentage, calculateTrend } from '../utils/trend-calculator';
 import { ChartType, Trend } from '../interfaces/enums';
 import { getColor } from '../utils/trend-color-util';
-import { TrendIndicator } from './trend-indicator';
+import { TrendIndicator } from './trend-indicator.component';
 import { useDispatch } from 'react-redux';
 import { setCurrentData } from '../state/current-data-reducer';
 

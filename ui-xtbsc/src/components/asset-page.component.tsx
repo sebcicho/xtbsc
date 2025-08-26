@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { FinancialChart } from "./financial-chart";
+import { FinancialChart } from "./financial-chart.component";
 import { Spinner } from "@heroui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../state/redux-configurator";
@@ -7,7 +7,7 @@ import { ChartType } from "../interfaces/enums";
 import { useEffect, useState } from "react";
 import { setCurrencyMetadata, setStockMetadata } from "../state/metadata-reducer";
 import { StockMetadata } from "../interfaces/stock-metadata";
-import { AssetInfo } from "./asset-info";
+import { AssetInfo } from "./asset-info.component";
 
 
 export const AssetPage: React.FC = () => {
