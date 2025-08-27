@@ -26,7 +26,6 @@ public class StockPricesPersistance {
 
     private final StockMetadataRepository stockMetadataRepository;
 
-
     @Autowired
     public StockPricesPersistance(FinancialDataRepository financialDataRepository, StockMetadataRepository stockMetadataRepositor) {
         this.financialDataRepository = financialDataRepository;

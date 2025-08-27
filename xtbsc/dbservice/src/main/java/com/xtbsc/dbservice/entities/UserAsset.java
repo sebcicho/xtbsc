@@ -27,4 +27,24 @@ public class UserAsset {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    public AssetType getAssetType() {
+        return assetType;
+    }
+
+    public String getAssetSymbol() {
+        return assetSymbol;
+    }
+
+    public Double getQuantity() {
+        return quantity;
+    }
+
+    public Double getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public Long getTimestampTransaction() {
+        return timestampTransaction;
+    }
 }

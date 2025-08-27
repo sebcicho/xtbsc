@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {Button} from "@heroui/button";
-import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useApiClient } from "../../api-client";
 
 export const LoginButton: React.FC = () => {
-  const navigate = useNavigate();
+  const didCreateUser = useRef(false);
   const [userDetails, setUserDetails] = useState<any>(null);
-  const { loginWithRedirect, logout, user, isAuthenticated, isLoading, getAccessTokenSilently  } = useAuth0();
-  const { apiFetchAuthenticated } = useApiClient();
+  const { loginWithRedirect, logout, user, isAuthenticated  } = useAuth0();
+  const { apiFetchAuthenticated, apiPostAuthenticated } = useApiClient();
 
   const requestUser = async () => {
     const res = await apiFetchAuthenticated("http://localhost:8080/user");
@@ -24,15 +23,41 @@ export const LoginButton: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    const createUser = async () => {
+      if (isAuthenticated && user && !didCreateUser.current) {
+        try {
+          await apiPostAuthenticated("http://localhost:8080/user", {});
+          console.log("User created/updated:");
+          didCreateUser.current = true;
+        } catch (err) {
+          console.error("Error creating user:", err);
+        }
+      }
+    };
+
+    createUser();
+  }, [isAuthenticated ]);
+
   return (
     <span>
-      <Button onPress={requestUser}>Get user</Button>
+    {(isAuthenticated && user) ? 
+      <Button className="mr-2" onPress={requestUser}>
+        <span className="flex items-center">
+          {user?.email}
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 ml-2">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+          </svg>
+
+        </span>
+      </Button> : ""
+    }
     <Button
       className=""
       onPress={handleAuth}
        variant="bordered"
     >
-      <span className="mr-2">{isAuthenticated ? "Logout" : "Log in"}</span>
+      <span className="mr-1">{isAuthenticated ? "Logout" : "Log in"}</span>
     
     <span>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6">

@@ -17,4 +17,20 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<UserAsset> assets = new ArrayList<>();
+
+    public String getOktaUserId() {
+        return oktaUserId;
+    }
+
+    public void setOktaUserId(String oktaUserId) {
+        this.oktaUserId = oktaUserId;
+    }
+
+    public List<UserAsset> getAssets() {
+        return assets;
+    }
+
+    public void setAssets(List<UserAsset> assets) {
+        this.assets = assets;
+    }
 }

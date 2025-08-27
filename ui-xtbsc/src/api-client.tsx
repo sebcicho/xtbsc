@@ -12,10 +12,19 @@ export const useApiClient = () => {
       ...options.headers,
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
+      Accept: "application/json",
     };
 
     return fetch(url, { ...options, headers });
   };
 
-  return { apiFetchAuthenticated };
+  const apiPostAuthenticated = async (url: string, body: any, options: RequestInit = {}) => {
+    return apiFetchAuthenticated(url, {
+      ...options,
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  };
+
+  return { apiPostAuthenticated, apiFetchAuthenticated };
 };
