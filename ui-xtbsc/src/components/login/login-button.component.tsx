@@ -2,48 +2,26 @@ import React, { useEffect, useState } from "react";
 import {Button} from "@heroui/button";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useApiClient } from "../../api-client";
 
 export const LoginButton: React.FC = () => {
   const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState<any>(null);
   const { loginWithRedirect, logout, user, isAuthenticated, isLoading, getAccessTokenSilently  } = useAuth0();
-  
+  const { apiFetchAuthenticated } = useApiClient();
+
+  const requestUser = async () => {
+    const res = await apiFetchAuthenticated("http://localhost:8080/user");
+    const data = await res.json();
+    setUserDetails(data);
+  };
+
   const handleAuth = () => {
     if(!isAuthenticated) {
       loginWithRedirect()
     } else{
        logout({ logoutParams: { returnTo: window.location.origin } })
     }
-  };
-
-  const requestUser = async () => {
-      if (isAuthenticated && user) {
-        try {
-          // Get token from Auth0 (if your backend needs it)
-          const token = await getAccessTokenSilently({
-            authorizationParams: {
-              audience: "localhost:8080/",
-            }
-          });
-
-          const res = await fetch(`http://localhost:8080/user`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          if (!res.ok) throw new Error("Failed to fetch user details");
-
-          const data = await res.json();
-          
-          setUserDetails(data);
-
-          console.log("User details from backend:", data);
-        } catch (err) {
-          console.error(err);
-        }
-      
-    };
   };
 
   return (
