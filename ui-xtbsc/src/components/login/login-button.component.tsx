@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {Button} from "@heroui/button";
 import { useNavigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export const LoginButton: React.FC = () => {
   const navigate = useNavigate();
-   const { loginWithRedirect, logout, user, isAuthenticated, isLoading  } = useAuth0();
+  const [userDetails, setUserDetails] = useState<any>(null);
+  const { loginWithRedirect, logout, user, isAuthenticated, isLoading, getAccessTokenSilently  } = useAuth0();
   
   const handleAuth = () => {
     if(!isAuthenticated) {
@@ -15,7 +16,39 @@ export const LoginButton: React.FC = () => {
     }
   };
 
+  const requestUser = async () => {
+      if (isAuthenticated && user) {
+        try {
+          // Get token from Auth0 (if your backend needs it)
+          const token = await getAccessTokenSilently({
+            authorizationParams: {
+              audience: "localhost:8080/",
+            }
+          });
+
+          const res = await fetch(`http://localhost:8080/user`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+
+          if (!res.ok) throw new Error("Failed to fetch user details");
+
+          const data = await res.json();
+          
+          setUserDetails(data);
+
+          console.log("User details from backend:", data);
+        } catch (err) {
+          console.error(err);
+        }
+      
+    };
+  };
+
   return (
+    <span>
+      <Button onPress={requestUser}>Get user</Button>
     <Button
       className=""
       onPress={handleAuth}
@@ -30,5 +63,6 @@ export const LoginButton: React.FC = () => {
     </span>    
 
     </Button>
+    </span>
   );
 };
