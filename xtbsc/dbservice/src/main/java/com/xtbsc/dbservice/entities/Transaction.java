@@ -1,10 +1,11 @@
 package com.xtbsc.dbservice.entities;
 
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "user_assets")
-public class UserAsset {
+@Table(name = "transactions")
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,9 +18,6 @@ public class UserAsset {
 
     @Column(nullable = false)
     private Double quantity;
-
-    @Column(nullable = false)
-    private Double price;
 
     @Column(nullable = false)
     private Long timestampTransaction;
@@ -44,31 +42,23 @@ public class UserAsset {
         return timestampTransaction;
     }
 
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setAssetSymbol(String assetSymbol) {
-        this.assetSymbol = assetSymbol;
-    }
-
-    public void setAssetType(AssetType assetType) {
-        this.assetType = assetType;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
+    public void setTimestampTransaction(Long timestampTransaction) {
+        this.timestampTransaction = timestampTransaction;
     }
 
     public void setQuantity(Double quantity) {
         this.quantity = quantity;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAssetType(AssetType assetType) {
+        this.assetType = assetType;
     }
 
-    public void setTimestampTransaction(Long timestampTransaction) {
-        this.timestampTransaction = timestampTransaction;
+    public void setAssetSymbol(String assetSymbol) {
+        this.assetSymbol = assetSymbol;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

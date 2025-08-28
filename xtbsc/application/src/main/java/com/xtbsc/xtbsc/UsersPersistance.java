@@ -35,6 +35,7 @@ public class UsersPersistance {
         User user = new User();
         user.setOktaUserId(oktaId);
         user.setAssets(new ArrayList<>());
+        user.setTransactions(new ArrayList<>());
         this.userRepository.save(user);
         return true;
     }

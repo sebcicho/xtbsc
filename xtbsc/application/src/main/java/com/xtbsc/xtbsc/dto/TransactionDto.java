@@ -1,6 +1,6 @@
 package com.xtbsc.xtbsc.dto;
 
-public class AssetDto {
+public class TransactionDto {
 
     private final String assetType;
 
@@ -10,9 +10,9 @@ public class AssetDto {
 
     private final Double price;
 
-    private Long timestampTransaction;
+    private final Long timestampTransaction;
 
-    public AssetDto(String assetType, String assetSymbol, Double quantity, Long timestampTransaction, Double price) {
+    public TransactionDto(String assetType, String assetSymbol, Double quantity, Long timestampTransaction, Double price) {
         this.assetType = assetType;
         this.assetSymbol = assetSymbol;
         this.quantity = quantity;

@@ -27,7 +27,7 @@ public class UserRestController {
         this.usersPersistance = usersPersistance;
     }
 
-    @GetMapping(value = "user", produces = MediaType    .APPLICATION_JSON_VALUE)
+    @GetMapping(value = "user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> getUser(@AuthenticationPrincipal Jwt jwt) {
         LOGGER.info("GET");
         User user = this.usersPersistance.getUser(jwt.getSubject());
@@ -36,8 +36,8 @@ public class UserRestController {
                         userAsset.getAssetType().name(),
                         userAsset.getAssetSymbol(),
                         userAsset.getQuantity(),
-                        userAsset.getPurchasePrice(),
-                        userAsset.getTimestampTransaction()
+                        userAsset.getTimestampTransaction(),
+                        userAsset.getPrice()
                 )
         )).toList());
         LOGGER.info(String.format("user %s",userDto));

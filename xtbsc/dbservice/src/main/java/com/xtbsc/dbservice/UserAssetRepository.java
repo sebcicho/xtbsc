@@ -13,5 +13,5 @@ public interface UserAssetRepository extends JpaRepository<UserAsset, Long> {
 
     List<UserAsset> findByUserAndAssetSymbol(User user, String assetSymbol);
 
-
+    UserAsset findFirstByUserAndAssetSymbolOrderByTimestampTransaction(User user, String assetSymbol);
 }
