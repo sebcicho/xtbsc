@@ -1,21 +1,20 @@
 import { useParams } from "react-router-dom";
 import { FinancialChart } from "./financial-chart.component";
 import { Spinner } from "@heroui/react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../state/redux-configurator";
+import { useAppDispatch } from '../state/metadata-reducer';
 import { ChartType } from "../interfaces/enums";
 import { useEffect, useState } from "react";
-import { setCurrencyMetadata, setStockMetadata } from "../state/metadata-reducer";
-import { StockMetadata } from "../interfaces/stock-metadata";
+import { fetchMetadata } from "../state/metadata-reducer";
 import { AssetInfo } from "./asset-info.component";
 
-
 export const AssetPage: React.FC = () => {
+  const dispatch = useAppDispatch();
   const { symbol } = useParams<{ symbol: string; }>();
   const stockMetadata = useSelector((state: RootState) => state.metadata.stockMetadata);
   const currencyMetadata = useSelector((state: RootState) => state.metadata.currencyMetadata);
   const currentData = useSelector((state: RootState) => state.currentData.currentData);
-  const dispatch = useDispatch();
 
   const [loading, setLoading] = useState(false);
 
@@ -30,37 +29,8 @@ export const AssetPage: React.FC = () => {
   }, [symbol]);
 
   useEffect(() => {
-    if (!stockAssetFromState && !currencyAsset && symbol) {
-      setLoading(true);
-      Promise.all([
-        fetch(`http://localhost:8080/stock/metadata`).then(res => res.json()),
-        fetch(`http://localhost:8080/currency/metadata`).then(res => res.json())
-      ])
-        .then(([stockRes, currencyRes]) => {
-          dispatch(setCurrencyMetadata(currencyRes));
-          
-          const typesMap = stockRes["typesMap"];
-
-          const tickersFiltered: StockMetadata[] = [];
-          Object.keys(typesMap).forEach(ticker => {
-            const stockData = typesMap[ticker];
-
-
-            tickersFiltered.push({
-              symbol: ticker,
-              type: stockData.type,
-              name: stockData.name,
-            });
-            
-          });
-          dispatch(setStockMetadata(tickersFiltered));
-        })
-        .catch((err) => {
-          console.error('Fetch error:', err);
-        })
-        .finally(() => setLoading(false));
-    }
-  }, [stockAssetFromState, currencyAsset, symbol]);
+    dispatch(fetchMetadata());
+  }, [dispatch]);
 
   return (
     <div className="min-h-screen w-full bg-background">

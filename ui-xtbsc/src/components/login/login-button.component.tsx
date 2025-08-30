@@ -2,18 +2,14 @@ import React, { useEffect, useRef, useState } from "react";
 import {Button} from "@heroui/button";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useApiClient } from "../../api-client";
+import { useNavigate } from "react-router-dom";
 
 export const LoginButton: React.FC = () => {
   const didCreateUser = useRef(false);
-  const [userDetails, setUserDetails] = useState<any>(null);
-  const { loginWithRedirect, logout, user, isAuthenticated  } = useAuth0();
-  const { apiFetchAuthenticated, apiPostAuthenticated } = useApiClient();
+  const navigate = useNavigate();
+  const { loginWithRedirect, logout, user, isAuthenticated, isLoading  } = useAuth0();
+  const { apiPostAuthenticated } = useApiClient();
 
-  const requestUser = async () => {
-    const res = await apiFetchAuthenticated("http://localhost:8080/user");
-    const data = await res.json();
-    setUserDetails(data);
-  };
 
   const handleAuth = () => {
     if(!isAuthenticated) {
@@ -41,8 +37,8 @@ export const LoginButton: React.FC = () => {
 
   return (
     <span>
-    {(isAuthenticated && user) ? 
-      <Button className="mr-2" onPress={requestUser}>
+    {(isAuthenticated && user && !isLoading) ? 
+      <Button className="mr-2" onPress={() => navigate(`/user`)}>
         <span className="flex items-center">
           {user?.email}
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-6 ml-2">

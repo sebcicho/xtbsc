@@ -17,6 +17,9 @@ public class Transaction {
     private String assetSymbol;
 
     @Column(nullable = false)
+    private String currency;
+
+    @Column(nullable = false)
     private Double quantity;
 
     @Column(nullable = false)
@@ -60,5 +63,13 @@ public class Transaction {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 }

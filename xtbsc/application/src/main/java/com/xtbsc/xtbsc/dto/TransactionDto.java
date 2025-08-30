@@ -12,12 +12,15 @@ public class TransactionDto {
 
     private final Long timestampTransaction;
 
-    public TransactionDto(String assetType, String assetSymbol, Double quantity, Long timestampTransaction, Double price) {
+    private final String currency;
+
+    public TransactionDto(String assetType, String assetSymbol, Double quantity, Long timestampTransaction, Double price, String currency) {
         this.assetType = assetType;
         this.assetSymbol = assetSymbol;
         this.quantity = quantity;
         this.timestampTransaction = timestampTransaction;
         this.price = price;
+        this.currency = currency;
     }
 
     @Override
@@ -27,6 +30,7 @@ public class TransactionDto {
                 ", assetSymbol='" + assetSymbol + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
+                ", currency=" + currency +
                 ", timestampTransaction=" + timestampTransaction +
                 '}';
     }
@@ -49,5 +53,9 @@ public class TransactionDto {
 
     public Double getPrice() {
         return price;
+    }
+
+    public String getCurrency() {
+        return currency;
     }
 }

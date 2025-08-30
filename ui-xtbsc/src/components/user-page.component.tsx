@@ -1,9 +1,44 @@
+import { useAuth0 } from "@auth0/auth0-react";
+import { NotAuthorized } from "./not-authorized.component";
+import { Spinner } from "@heroui/react";
+import { useApiClient } from "../api-client";
+import { useEffect, useState } from "react";
+import { AccountBalance } from "./account-balance.component";
 
 
 export const UserPage: React.FC = () => {
+  const { user, isAuthenticated, isLoading   } = useAuth0();
+  const [userDetails, setUserDetails] = useState<any>(null);
+  const { apiFetchAuthenticated } = useApiClient();
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      const res = await apiFetchAuthenticated("http://localhost:8080/user");
+      const data = await res.json();
+      setUserDetails(data);
+    };
+
+    fetchUserDetails();
+  }, []);
+
+   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+
   return (
-    <div>
-      <h1>User Page</h1>
+    <div className="min-h-screen w-full bg-background">
+      {(isLoading ? 
+        <div className="flex justify-center items-center h-40">
+          <Spinner />
+        </div> : 
+        (isAuthenticated && user) ?
+          <div className="m-8">
+            <h1 className="text-2xl font-bold mb-8 text-foreground">Your Dashboard</h1>
+            <AccountBalance assets={userDetails?.assets || []} />
+          </div> :
+          <NotAuthorized />
+      )}
     </div>
+    
   );
 }

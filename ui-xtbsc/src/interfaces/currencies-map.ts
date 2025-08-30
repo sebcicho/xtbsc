@@ -4,5 +4,6 @@ export const currenciesMap: Record<string, string> = {
   BTC: '₿',
   GBP: '£',
   NOK: 'kr',
-  CHF: 'Fr'
+  CHF: 'Fr',
+  USD: '$',
 };

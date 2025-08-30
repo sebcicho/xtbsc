@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 import { store, persistor } from './state/redux-configurator';
 import { Navbar, NavbarBrand, Link } from "@heroui/react";
 import { LoginButton } from './components/login/login-button.component';
+import { UserPage } from './components/user-page.component';
 
 
 export default function App() {
@@ -32,6 +33,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<LandingPage/>} />
             <Route path="/asset/:symbol/" element={<AssetPage />} />
+            <Route path="/user" element={<UserPage />} />
           </Routes>
       </PersistGate>
     </Provider>
