@@ -1,5 +1,6 @@
 package com.xtbsc.dbservice;
 
+import com.xtbsc.dbservice.entities.AssetType;
 import com.xtbsc.dbservice.entities.User;
 import com.xtbsc.dbservice.entities.UserAsset;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,4 +15,10 @@ public interface UserAssetRepository extends JpaRepository<UserAsset, Long> {
     List<UserAsset> findByUserAndAssetSymbol(User user, String assetSymbol);
 
     UserAsset findFirstByUserAndAssetSymbolOrderByTimestampTransaction(User user, String assetSymbol);
+
+    UserAsset findFirstByUserAndAssetTypeAndAssetSymbolOrderByTimestampTransaction(
+            User user,
+            AssetType assetType,
+            String assetSymbol
+    );
 }

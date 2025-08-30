@@ -14,4 +14,6 @@ public interface FinancialDataRepository extends JpaRepository<FinancialData, In
 	List<FinancialData> findBySymbolOrderByTimestamp(String symbol);
 
 	boolean existsByTimestampAndDateAndSymbol(Long Timestamp, String date, String symbol);
+
+	FinancialData findFirstBySymbolOrderByTimestamp(String symbol);
 }

@@ -71,4 +71,16 @@ public class UserAsset {
     public void setTimestampTransaction(Long timestampTransaction) {
         this.timestampTransaction = timestampTransaction;
     }
+
+    @Override
+    public String toString() {
+        return "UserAsset{" +
+                "id=" + id +
+                ", assetType=" + assetType +
+                ", assetSymbol='" + assetSymbol + '\'' +
+                ", quantity=" + quantity +
+                ", price=" + price +
+                ", timestampTransaction=" + timestampTransaction +
+                '}';
+    }
 }

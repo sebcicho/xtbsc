@@ -2,6 +2,7 @@ package com.xtbsc.xtbsc;
 
 
 import com.xtbsc.xtbsc.dto.TransactionDto;
+import com.xtbsc.xtbsc.result.TransactionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
+import java.util.Map;
 
 @RestController
 public class TransactionsRestController {
@@ -25,12 +27,40 @@ public class TransactionsRestController {
         this.transactionsPersistance = transactionsPersistance;
     }
 
-    @PostMapping("transaction")
-    public ResponseEntity storeTrasaction(@AuthenticationPrincipal Jwt jwt, @RequestBody TransactionDto transactionDto) {
+    @PostMapping("transaction/account")
+    public ResponseEntity storeAccountTransaction(@AuthenticationPrincipal Jwt jwt, @RequestBody TransactionDto transactionDto) {
+        if (transactionDto == null) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "Transaction failed",
+                    "reason","Missing transaction"
+            ));
+        }
 
-        boolean created = this.transactionsPersistance.storeTransaction(jwt.getSubject(), transactionDto);
-        return created ?
+        TransactionResult result = this.transactionsPersistance.storeDepositTransaction(jwt.getSubject(), transactionDto);
+
+        return result.isSuccesfull() ?
                 ResponseEntity.created(URI.create("/transaction/" + jwt.getSubject().replace('|', '/'))).build() :
-                ResponseEntity.badRequest().build();
+                ResponseEntity.badRequest().body(Map.of(
+                        "error", "Transaction failed",
+                        "reason", result.getMessage()
+                        ));
+    }
+
+    @PostMapping("transaction/trade")
+    public ResponseEntity storeTradeTrasaction(@AuthenticationPrincipal Jwt jwt, @RequestBody TransactionDto transactionDto) {
+        if (transactionDto == null) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "Transaction failed",
+                    "reason","Missing transaction"
+            ));
+        }
+
+        TransactionResult result = this.transactionsPersistance.storeTradeTransaction(jwt.getSubject(), transactionDto);
+        return result.isSuccesfull() ?
+                ResponseEntity.created(URI.create("/transaction/" + jwt.getSubject().replace('|', '/'))).build() :
+                ResponseEntity.badRequest().body(Map.of(
+                        "error", "Transaction failed",
+                        "reason", result.getMessage()
+                ));
     }
 }
