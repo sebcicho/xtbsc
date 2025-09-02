@@ -16,8 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 
-import static com.xtbsc.dataCollector.constants.Constants.SUPPORTED_CURRENCIES;
-
 @Service
 public class TransactionsPersistance {
 
@@ -48,6 +46,7 @@ public class TransactionsPersistance {
         UserAsset latestAsset = this.userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransaction(user, transactionDto.getAssetSymbol());
         Double latestQuantity = latestAsset != null ? latestAsset.getQuantity() : 0;
         CurrencyData toDollarFinancialData = currencyDataRepository.findFirstBySymbolToOrderByTimestamp(transactionDto.getCurrency());
+
         if (latestQuantity + transactionDto.getQuantity() < 0){
             return new TransactionResult(false, "Transaction would result in negative quantity", TransactionErrorCode.NOT_SUFFICIENT_QUANTITY);
         }
@@ -55,11 +54,13 @@ public class TransactionsPersistance {
         UserAsset userAsset = new UserAsset();
         userAsset.setAssetSymbol(transactionDto.getAssetSymbol());
         userAsset.setAssetType(AssetType.CURRENCY);
-        userAsset.setQuantity(0.0);
+        userAsset.setQuantity(latestQuantity);
         userAsset.setPrice(toDollarFinancialData.getValue());
 
         this.transactionRepository.save(createTransaction(transactionDto, user));
         this.userAssetRepository.save(createUserFundAsset(userAsset, user, transactionDto.getQuantity()));
+//        LOGGER.info(String.format("creating transaction: %s", createTransaction(transactionDto, user)));
+//        LOGGER.info(String.format("creating user fund asset: %s", createUserFundAsset(userAsset, user, transactionDto.getQuantity())));
         return TransactionResult.buildSuccessfulResult();
     }
 
@@ -89,7 +90,7 @@ public class TransactionsPersistance {
         return TransactionResult.buildSuccessfulResult();
     }
 
-    private TransactionResult validateTransactionPossibility(TransactionDto transactionDto, UserAsset fundAsset, FinancialData symbolFinancialData, Double latestQuantity, CurrencyData toDollarFinancialData) {
+    public TransactionResult validateTransactionPossibility(TransactionDto transactionDto, UserAsset fundAsset, FinancialData symbolFinancialData, Double latestQuantity, CurrencyData toDollarFinancialData) {
         if (symbolFinancialData == null) {
             LOGGER.warn(String.format("Not Known Asset for transaction %s", transactionDto));
             return new TransactionResult(false, "Not Known Asset", TransactionErrorCode.NOT_KNOWN_ASSET);
@@ -101,7 +102,8 @@ public class TransactionsPersistance {
         }
 
         Double priceInCurrency = symbolFinancialData.getValue() * (1 / toDollarFinancialData.getValue());
-        if (fundAsset.getQuantity() - priceInCurrency * transactionDto.getQuantity() < 0) {
+            Double balance = fundAsset.getQuantity() - priceInCurrency * transactionDto.getQuantity();
+        if (balance < 0) {
             LOGGER.warn(String.format("Transaction would result in negative quantity %s", transactionDto));
             return new TransactionResult(false, "Transaction would result in negative quantity", TransactionErrorCode.NOT_SUFFICIENT_FUNDS);
         }
@@ -120,6 +122,7 @@ public class TransactionsPersistance {
         transaction.setAssetSymbol(transactionDto.getAssetSymbol());
         transaction.setAssetType(AssetType.valueOf(transactionDto.getAssetType()));
         transaction.setQuantity(transactionDto.getQuantity());
+        transaction.setCurrency(transactionDto.getCurrency());
         transaction.setUser(user);
         LOGGER.info(String.format("creating transaction: %s", transactionDto));
         return transaction;
@@ -131,6 +134,7 @@ public class TransactionsPersistance {
         userAsset.setAssetSymbol(fundAsset.getAssetSymbol());
         userAsset.setAssetType(fundAsset.getAssetType());
         userAsset.setQuantity(fundAsset.getQuantity() + fundsToBeAdded);
+        userAsset.setPrice(0.0);
         userAsset.setUser(user);
         LOGGER.info(String.format("updating fund asset: %s", userAsset));
         return userAsset;

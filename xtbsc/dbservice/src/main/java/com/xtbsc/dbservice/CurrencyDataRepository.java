@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface CurrencyDataRepository  extends JpaRepository<CurrencyData, Integer> {
 
-    // Find data for a specific symbol within a time range
     List<CurrencyData> findBySymbolToOrderByTimestamp(String symbolTo);
 
     CurrencyData findFirstBySymbolToOrderByTimestamp(String symbolTo);

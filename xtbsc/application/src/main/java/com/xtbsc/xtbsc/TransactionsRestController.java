@@ -2,6 +2,8 @@ package com.xtbsc.xtbsc;
 
 
 import com.xtbsc.xtbsc.dto.TransactionDto;
+import com.xtbsc.xtbsc.dto.TransactionWrapperDto;
+import com.xtbsc.xtbsc.result.TransactionErrorCode;
 import com.xtbsc.xtbsc.result.TransactionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,16 +30,16 @@ public class TransactionsRestController {
     }
 
     @PostMapping("transaction/account")
-    public ResponseEntity storeAccountTransaction(@AuthenticationPrincipal Jwt jwt, @RequestBody TransactionDto transactionDto) {
-        if (transactionDto == null) {
+    public ResponseEntity storeAccountTransaction(@AuthenticationPrincipal Jwt jwt, @RequestBody TransactionWrapperDto transactionDto) {
+        if (transactionDto == null || transactionDto.getTransaction() == null) {
             return ResponseEntity.badRequest().body(Map.of(
                     "error", "Transaction failed",
                     "reason","Missing transaction"
             ));
         }
 
-        TransactionResult result = this.transactionsPersistance.storeDepositTransaction(jwt.getSubject(), transactionDto);
-
+        TransactionResult result = this.transactionsPersistance.storeDepositTransaction(jwt.getSubject(), transactionDto.getTransaction());
+//        TransactionResult result = new TransactionResult(false, "Message", TransactionErrorCode.NOT_SUFFICIENT_QUANTITY);
         return result.isSuccesfull() ?
                 ResponseEntity.created(URI.create("/transaction/" + jwt.getSubject().replace('|', '/'))).build() :
                 ResponseEntity.badRequest().body(Map.of(
@@ -47,15 +49,15 @@ public class TransactionsRestController {
     }
 
     @PostMapping("transaction/trade")
-    public ResponseEntity storeTradeTrasaction(@AuthenticationPrincipal Jwt jwt, @RequestBody TransactionDto transactionDto) {
-        if (transactionDto == null) {
+    public ResponseEntity storeTradeTrasaction(@AuthenticationPrincipal Jwt jwt, @RequestBody TransactionWrapperDto transactionDto) {
+        if (transactionDto == null || transactionDto.getTransaction() == null) {
             return ResponseEntity.badRequest().body(Map.of(
                     "error", "Transaction failed",
                     "reason","Missing transaction"
             ));
         }
 
-        TransactionResult result = this.transactionsPersistance.storeTradeTransaction(jwt.getSubject(), transactionDto);
+        TransactionResult result = this.transactionsPersistance.storeTradeTransaction(jwt.getSubject(), transactionDto.getTransaction());
         return result.isSuccesfull() ?
                 ResponseEntity.created(URI.create("/transaction/" + jwt.getSubject().replace('|', '/'))).build() :
                 ResponseEntity.badRequest().body(Map.of(

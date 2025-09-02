@@ -17,7 +17,7 @@ export default function App() {
       <PersistGate loading={null} persistor={persistor}>
           <Navbar shouldHideOnScroll={false} isBordered maxWidth="full" className="bg-content1">
             <NavbarBrand>
-              <div className='flex w-full justify-between items-center' >
+              <div className='flex w-full justify-between items-center'>
                 <Link href="/" color="foreground" className="font-bold text-inherit">
                   <span className="mr-1">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="size-10">
