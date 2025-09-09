@@ -9,10 +9,15 @@ import { useApiClient } from "../api-client";
 import { TransactionDto } from "../interfaces/transaction-dto";
 
 interface AccountBalanceProps {
-  assets: AssetDto[]
+    assets: AssetDto[];
+    onFundsAdded?: () => void;
 }
 
-export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets }) => {
+interface CallServerResult {
+    error?: string;
+    reason?: string;
+}
+export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets, onFundsAdded }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [errors, setErrors] = useState({});
     const {isOpen, onOpen, onOpenChange, onClose} = useDisclosure();
@@ -50,30 +55,30 @@ export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets }) => {
 
     const callServer = async (
         data: { amount: number; currency: string; price?: number }
-    ): Promise<{ errors: Record<string, string> }> => {
+    ): Promise<{ error: string | null }> => {
         try {
             const transaction: TransactionDto = {
-            assetType: "CURRENCY",
-            assetSymbol: data.currency,
-            quantity: data.amount,
-            price: data.price,
-            timestampTransaction: Date.now(),
-            currency: data.currency,
+                assetType: "CURRENCY",
+                assetSymbol: data.currency,
+                quantity: data.amount,
+                price: data.price,
+                timestampTransaction: Date.now(),
+                currency: data.currency,
             };
 
-            const response = await apiPostAuthenticated(
-            "http://localhost:8080/transaction/account",
-            { transaction }
-            );
+            const response: CallServerResult = await apiPostAuthenticated(
+                "http://localhost:8080/transaction/account",
+                { transaction }
+            ).then(res => res.json());
 
-            if (response?.error) {
-                return { errors: response.error as Record<string, string> };
+            if (response?.error && response?.reason) {
+                return { error: response.error + ": " + response.reason };
             }
 
-            return { errors: {} };
+            return { error: null };
         } catch (err: any) {
             return {
-                errors: { general: err?.message ?? "Unexpected error while adding funds" },
+                error: "Unexpected error while adding funds",
             };
         }
     };
@@ -137,12 +142,15 @@ export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets }) => {
                         };
 
                         const result = await callServer(payload);
-
-                        if (Object.keys(result.errors).length === 0) {
+                        console.log(result);
+                        if (result.error === null) {
                             setErrors({});
                             onClose();
+                            if (onFundsAdded) {
+                                onFundsAdded();
+                            }
                         } else {
-                            setErrors(result.errors);
+                            setErrors({ amount: result.error });
                         }
                     }}
                 >

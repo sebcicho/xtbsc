@@ -46,7 +46,7 @@ class TransactionsPersistanceTest {
         TransactionDto dto = new TransactionDto(AssetType.STOCK.name(), "AAPL", 100.0, 1L, 1.0, "USD");
 
 
-        when(userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransaction(any(), eq("USD")))
+        when(userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransactionDesc(any(), eq("USD")))
                 .thenReturn(null);
         CurrencyData currencyData = new CurrencyData();
         currencyData.setValue(1.0);
@@ -67,7 +67,7 @@ class TransactionsPersistanceTest {
 
         UserAsset existing = new UserAsset();
         existing.setQuantity(100.0);
-        when(userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransaction(any(), eq("USD")))
+        when(userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransactionDesc(any(), eq("USD")))
                 .thenReturn(existing);
 
         CurrencyData currencyData = new CurrencyData();
@@ -105,9 +105,9 @@ class TransactionsPersistanceTest {
         CurrencyData currencyData = new CurrencyData();
         currencyData.setValue(1.0);
 
-        when(userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransaction(any(), eq("AAPL")))
+        when(userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransactionDesc(any(), eq("AAPL")))
                 .thenReturn(latestAsset);
-        when(userAssetRepository.findFirstByUserAndAssetTypeAndAssetSymbolOrderByTimestampTransaction(any(), eq(AssetType.CURRENCY), eq("USD")))
+        when(userAssetRepository.findFirstByUserAndAssetTypeAndAssetSymbolOrderByTimestampTransactionDesc(any(), eq(AssetType.CURRENCY), eq("USD")))
                 .thenReturn(fundAsset);
         when(financialDataRepository.findFirstBySymbolOrderByTimestamp("AAPL")).thenReturn(financialData);
         when(currencyDataRepository.findFirstBySymbolToOrderByTimestamp("USD")).thenReturn(currencyData);
@@ -134,9 +134,9 @@ class TransactionsPersistanceTest {
         CurrencyData currencyData = new CurrencyData();
         currencyData.setValue(1.0);
 
-        when(userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransaction(any(), eq("AAPL")))
+        when(userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransactionDesc(any(), eq("AAPL")))
                 .thenReturn(null);
-        when(userAssetRepository.findFirstByUserAndAssetTypeAndAssetSymbolOrderByTimestampTransaction(any(), eq(AssetType.CURRENCY), eq("USD")))
+        when(userAssetRepository.findFirstByUserAndAssetTypeAndAssetSymbolOrderByTimestampTransactionDesc(any(), eq(AssetType.CURRENCY), eq("USD")))
                 .thenReturn(fundAsset);
         when(financialDataRepository.findFirstBySymbolOrderByTimestamp("AAPL")).thenReturn(financialData);
         when(currencyDataRepository.findFirstBySymbolToOrderByTimestamp("USD")).thenReturn(currencyData);

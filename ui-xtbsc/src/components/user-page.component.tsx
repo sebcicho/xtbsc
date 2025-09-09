@@ -10,13 +10,15 @@ export const UserPage: React.FC = () => {
   const { user, isAuthenticated, isLoading   } = useAuth0();
   const [userDetails, setUserDetails] = useState<any>(null);
   const { apiFetchAuthenticated } = useApiClient();
-  useEffect(() => {
-    const fetchUserDetails = async () => {
+  
+  const fetchUserDetails = async () => {
       const res = await apiFetchAuthenticated("http://localhost:8080/user");
       const data = await res.json();
       setUserDetails(data);
-    };
-
+  };
+  
+  
+  useEffect(() => {
     fetchUserDetails();
   }, []);
 
@@ -34,7 +36,9 @@ export const UserPage: React.FC = () => {
         (isAuthenticated && user) ?
           <div className="m-8">
             <h1 className="text-2xl font-bold mb-8 text-foreground">Your Dashboard</h1>
-            <AccountBalance assets={userDetails?.assets || []} />
+            <AccountBalance assets={userDetails?.assets || []} onFundsAdded={() => {
+                fetchUserDetails();
+            }} />
           </div> :
           <NotAuthorized />
       )}

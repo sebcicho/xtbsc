@@ -43,7 +43,7 @@ public class TransactionsPersistance {
 
         User user = new User();
         user.setOktaUserId(oktaId);
-        UserAsset latestAsset = this.userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransaction(user, transactionDto.getAssetSymbol());
+        UserAsset latestAsset = this.userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransactionDesc(user, transactionDto.getAssetSymbol());
         Double latestQuantity = latestAsset != null ? latestAsset.getQuantity() : 0;
         CurrencyData toDollarFinancialData = currencyDataRepository.findFirstBySymbolToOrderByTimestamp(transactionDto.getCurrency());
 
@@ -59,8 +59,8 @@ public class TransactionsPersistance {
 
         this.transactionRepository.save(createTransaction(transactionDto, user));
         this.userAssetRepository.save(createUserFundAsset(userAsset, user, transactionDto.getQuantity()));
-//        LOGGER.info(String.format("creating transaction: %s", createTransaction(transactionDto, user)));
-//        LOGGER.info(String.format("creating user fund asset: %s", createUserFundAsset(userAsset, user, transactionDto.getQuantity())));
+        LOGGER.info(String.format("creating transaction: %s", createTransaction(transactionDto, user)));
+        LOGGER.info(String.format("creating user fund asset: %s", createUserFundAsset(userAsset, user, transactionDto.getQuantity())));
         return TransactionResult.buildSuccessfulResult();
     }
 
@@ -69,8 +69,8 @@ public class TransactionsPersistance {
 
         User user = new User();
         user.setOktaUserId(oktaId);
-        UserAsset latestAsset = this.userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransaction(user, transactionDto.getAssetSymbol());
-        UserAsset fundAsset = this.userAssetRepository.findFirstByUserAndAssetTypeAndAssetSymbolOrderByTimestampTransaction(user, AssetType.CURRENCY, transactionDto.getCurrency());
+        UserAsset latestAsset = this.userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransactionDesc(user, transactionDto.getAssetSymbol());
+        UserAsset fundAsset = this.userAssetRepository.findFirstByUserAndAssetTypeAndAssetSymbolOrderByTimestampTransactionDesc(user, AssetType.CURRENCY, transactionDto.getCurrency());
         FinancialData symbolFinancialData = financialDataRepository.findFirstBySymbolOrderByTimestamp(transactionDto.getAssetSymbol());
         CurrencyData toDollarFinancialData = currencyDataRepository.findFirstBySymbolToOrderByTimestamp(transactionDto.getCurrency()); // change here if we want to support assets in other currency
         Double latestQuantity = latestAsset != null ? latestAsset.getQuantity() : 0;
