@@ -18,13 +18,15 @@ export const AssetBalance: React.FC<AssetBalanceProps> = ({ currentData, symbol 
 
 
     const fetchAssetUserDetails = async () => {
-          const res = await apiFetchAuthenticated("http://localhost:8080/user");
+          const res = await apiFetchAuthenticated("http://localhost:8080/user/asset?symbol=" + symbol);
           const data = await res.json();
           setAssetUserDetails(data);
       };
       
       useEffect(() => {
-        fetchAssetUserDetails();
+        if(assetUserDetails === null && isAuthenticated && user) {
+            fetchAssetUserDetails();
+        }
       }, []);
 
     return (isAuthenticated && user && assetUserDetails) ?

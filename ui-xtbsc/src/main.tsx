@@ -24,7 +24,7 @@ if (import.meta.env.MODE === 'development') {
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+
     <Auth0Provider
     domain="dev-46juhlycxsc7dcbq.us.auth0.com"
     clientId="iX76ZezWM0QaU7p7IklXQNNAzSeYYkm4"
@@ -40,6 +40,5 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           </BrowserRouter>
         </main>
       </HeroUIProvider>
-    </Auth0Provider>
-  </React.StrictMode>,
+    </Auth0Provider>,
 );
