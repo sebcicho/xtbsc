@@ -126,7 +126,7 @@ export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets, onFundsA
                     </TableBody>
                 </Table>
                 <Modal isOpen={isOpen} placement="top-center"
-                    onOpenChange={(open) => {
+                    onOpenChange={() => {
                         setErrors({});
                         onOpenChange();
                     }}
@@ -179,6 +179,11 @@ export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets, onFundsA
                                 placeholder="Enter the amount"
                                 variant="bordered"
                                 name="amount"
+                                validate={(value) => {
+                                    if (value <= 0) {
+                                        return "Enter number greater than 0";
+                                    }
+                                }}
                             />
                             <Select
                                 isRequired 
