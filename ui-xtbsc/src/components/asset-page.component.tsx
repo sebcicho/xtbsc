@@ -47,7 +47,7 @@ export const AssetPage: React.FC = () => {
             } Overview</h2>
             <div className="mb-8 flex flex-row justify-between">
               <AssetInfo currentData={currentData} name={stockAssetFromState?.name || symbol} symbol={stockAssetFromState?.symbol || symbol} type={stockAssetFromState?.type || 'Currency'}/>
-              <AssetBalance currentData={currentData} symbol={stockAssetFromState?.symbol || symbol}/>
+              <AssetBalance currentData={currentData} symbol={stockAssetFromState?.symbol || symbol} type={stockAssetFromState?.type || 'Currency'}/>
             </div>
             <FinancialChart
               symbol={symbol}
