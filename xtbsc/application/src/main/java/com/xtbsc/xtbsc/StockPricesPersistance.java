@@ -4,7 +4,6 @@ import com.xtbsc.dataCollector.dto.StockMetadataDto;
 import com.xtbsc.dataCollector.mapper.FinancialDataMapper;
 import com.xtbsc.dbservice.FinancialDataRepository;
 import com.xtbsc.dbservice.StockMetadataRepository;
-import com.xtbsc.dbservice.entities.CurrencyData;
 import com.xtbsc.dbservice.entities.FinancialData;
 import com.xtbsc.dbservice.entities.StockMetadata;
 import org.slf4j.Logger;

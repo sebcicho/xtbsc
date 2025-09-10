@@ -9,5 +9,5 @@ public interface CurrencyDataRepository  extends JpaRepository<CurrencyData, Int
 
     List<CurrencyData> findBySymbolToOrderByTimestamp(String symbolTo);
 
-    CurrencyData findFirstBySymbolToOrderByTimestamp(String symbolTo);
+    CurrencyData findFirstBySymbolToOrderByTimestampDesc(String symbolTo);
 }

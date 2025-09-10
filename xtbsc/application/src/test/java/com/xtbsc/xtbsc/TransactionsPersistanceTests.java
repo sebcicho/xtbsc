@@ -50,7 +50,7 @@ class TransactionsPersistanceTest {
                 .thenReturn(null);
         CurrencyData currencyData = new CurrencyData();
         currencyData.setValue(1.0);
-        when(currencyDataRepository.findFirstBySymbolToOrderByTimestamp("USD"))
+        when(currencyDataRepository.findFirstBySymbolToOrderByTimestampDesc("USD"))
                 .thenReturn(currencyData);
 
         TransactionResult result = transactionsPersistance.storeDepositTransaction("okta123", dto);
@@ -72,7 +72,7 @@ class TransactionsPersistanceTest {
 
         CurrencyData currencyData = new CurrencyData();
         currencyData.setValue(1.0);
-        when(currencyDataRepository.findFirstBySymbolToOrderByTimestamp("USD"))
+        when(currencyDataRepository.findFirstBySymbolToOrderByTimestampDesc("USD"))
                 .thenReturn(currencyData);
 
         TransactionResult result = transactionsPersistance.storeDepositTransaction("okta123", dto);
@@ -109,8 +109,8 @@ class TransactionsPersistanceTest {
                 .thenReturn(latestAsset);
         when(userAssetRepository.findFirstByUserAndAssetTypeAndAssetSymbolOrderByTimestampTransactionDesc(any(), eq(AssetType.CURRENCY), eq("USD")))
                 .thenReturn(fundAsset);
-        when(financialDataRepository.findFirstBySymbolOrderByTimestamp("AAPL")).thenReturn(financialData);
-        when(currencyDataRepository.findFirstBySymbolToOrderByTimestamp("USD")).thenReturn(currencyData);
+        when(financialDataRepository.findFirstBySymbolOrderByTimestampDesc("AAPL")).thenReturn(financialData);
+        when(currencyDataRepository.findFirstBySymbolToOrderByTimestampDesc("USD")).thenReturn(currencyData);
 
         TransactionResult result = transactionsPersistance.storeTradeTransaction("okta123", dto);
 
@@ -138,8 +138,8 @@ class TransactionsPersistanceTest {
                 .thenReturn(null);
         when(userAssetRepository.findFirstByUserAndAssetTypeAndAssetSymbolOrderByTimestampTransactionDesc(any(), eq(AssetType.CURRENCY), eq("USD")))
                 .thenReturn(fundAsset);
-        when(financialDataRepository.findFirstBySymbolOrderByTimestamp("AAPL")).thenReturn(financialData);
-        when(currencyDataRepository.findFirstBySymbolToOrderByTimestamp("USD")).thenReturn(currencyData);
+        when(financialDataRepository.findFirstBySymbolOrderByTimestampDesc("AAPL")).thenReturn(financialData);
+        when(currencyDataRepository.findFirstBySymbolToOrderByTimestampDesc("USD")).thenReturn(currencyData);
 
         TransactionResult result = transactionsPersistance.storeTradeTransaction("okta123", dto);
 

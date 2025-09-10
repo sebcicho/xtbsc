@@ -69,7 +69,11 @@ export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets, onFundsA
             const response: CallServerResult = await apiPostAuthenticated(
                 "http://localhost:8080/transaction/account",
                 { transaction }
-            ).then(res => res.json());
+            ).then(async (res) => {
+                // Check if there is any response body
+                const text = await res.text();
+                return text ? JSON.parse(text) : {};
+            });
 
             if (response?.error && response?.reason) {
                 return { error: response.error + ": " + response.reason };
@@ -77,6 +81,7 @@ export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets, onFundsA
 
             return { error: null };
         } catch (err: any) {
+            console.error("Error while adding funds:", err);
             return {
                 error: "Unexpected error while adding funds",
             };
@@ -120,7 +125,11 @@ export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets, onFundsA
                         )}
                     </TableBody>
                 </Table>
-                <Modal isOpen={isOpen} placement="top-center" onOpenChange={onOpenChange}
+                <Modal isOpen={isOpen} placement="top-center"
+                    onOpenChange={(open) => {
+                        setErrors({});
+                        onOpenChange();
+                    }}
                     classNames={{
                         base: "bg-gray-950 text-foreground",
                         header: "text-xl font-bold",

@@ -45,7 +45,7 @@ public class TransactionsPersistance {
         user.setOktaUserId(oktaId);
         UserAsset latestAsset = this.userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransactionDesc(user, transactionDto.getAssetSymbol());
         Double latestQuantity = latestAsset != null ? latestAsset.getQuantity() : 0;
-        CurrencyData toDollarFinancialData = currencyDataRepository.findFirstBySymbolToOrderByTimestamp(transactionDto.getCurrency());
+        CurrencyData toDollarFinancialData = currencyDataRepository.findFirstBySymbolToOrderByTimestampDesc(transactionDto.getCurrency());
 
         if (latestQuantity + transactionDto.getQuantity() < 0){
             return new TransactionResult(false, "Transaction would result in negative quantity", TransactionErrorCode.NOT_SUFFICIENT_QUANTITY);
@@ -71,8 +71,8 @@ public class TransactionsPersistance {
         user.setOktaUserId(oktaId);
         UserAsset latestAsset = this.userAssetRepository.findFirstByUserAndAssetSymbolOrderByTimestampTransactionDesc(user, transactionDto.getAssetSymbol());
         UserAsset fundAsset = this.userAssetRepository.findFirstByUserAndAssetTypeAndAssetSymbolOrderByTimestampTransactionDesc(user, AssetType.CURRENCY, transactionDto.getCurrency());
-        FinancialData symbolFinancialData = financialDataRepository.findFirstBySymbolOrderByTimestamp(transactionDto.getAssetSymbol());
-        CurrencyData toDollarFinancialData = currencyDataRepository.findFirstBySymbolToOrderByTimestamp(transactionDto.getCurrency()); // change here if we want to support assets in other currency
+        FinancialData symbolFinancialData = financialDataRepository.findFirstBySymbolOrderByTimestampDesc(transactionDto.getAssetSymbol());
+        CurrencyData toDollarFinancialData = currencyDataRepository.findFirstBySymbolToOrderByTimestampDesc(transactionDto.getCurrency()); // change here if we want to support assets in other currency
         Double latestQuantity = latestAsset != null ? latestAsset.getQuantity() : 0;
 
 
