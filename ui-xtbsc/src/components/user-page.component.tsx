@@ -17,7 +17,6 @@ export const UserPage: React.FC = () => {
       setUserDetails(data);
   };
   
-  
   useEffect(() => {
     fetchUserDetails();
   }, []);

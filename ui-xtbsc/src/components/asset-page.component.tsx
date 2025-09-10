@@ -8,6 +8,7 @@ import { ChartType } from "../interfaces/enums";
 import { useEffect, useState } from "react";
 import { fetchMetadata } from "../state/metadata-reducer";
 import { AssetInfo } from "./asset-info.component";
+import { AssetBalance } from "./asset-balance.component";
 
 export const AssetPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -44,8 +45,9 @@ export const AssetPage: React.FC = () => {
               ? `${currencyAsset} currency to USD `
               : symbol
             } Overview</h2>
-            <div className="mb-8">
+            <div className="mb-8 flex flex-row justify-between">
               <AssetInfo currentData={currentData} name={stockAssetFromState?.name || symbol} symbol={stockAssetFromState?.symbol || symbol} type={stockAssetFromState?.type || 'Currency'}/>
+              <AssetBalance currentData={currentData} symbol={stockAssetFromState?.symbol || symbol}/>
             </div>
             <FinancialChart
               symbol={symbol}

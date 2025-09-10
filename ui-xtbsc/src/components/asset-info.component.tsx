@@ -9,7 +9,7 @@ interface AssetInfoProps {
 }
 
 export const AssetInfo: React.FC<AssetInfoProps> = ({ currentData, name, symbol, type }) => {
-    const currentPrice = Number(currentData[currentData.length - 1]?.[symbol]);
+  const currentPrice = Number(currentData[currentData.length - 1]?.[symbol]);
   const high = Math.max(
     ...currentData.map(dp => {
       const value = Number(dp[symbol]);
