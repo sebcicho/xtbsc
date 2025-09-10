@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.oauth2.jwt.Jwt;
 
@@ -29,7 +30,6 @@ public class UserRestController {
 
     @GetMapping(value = "user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> getUser(@AuthenticationPrincipal Jwt jwt) {
-        LOGGER.info("GET");
         User user = this.usersPersistance.getUser(jwt.getSubject());
         UserDto userDto = new UserDto(user.getOktaUserId(), user.getAssets().stream().map((userAsset ->
                 new AssetDto(
@@ -46,9 +46,28 @@ public class UserRestController {
         );
     }
 
+    @GetMapping(value = "user/asset", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<UserDto> getUser(@AuthenticationPrincipal Jwt jwt, @RequestParam String symbol) {
+        User user = this.usersPersistance.getUser(jwt.getSubject());
+        UserDto userDto = new UserDto(user.getOktaUserId(), user.getAssets().stream().filter(
+                userAsset -> userAsset.getAssetSymbol().equals(symbol)
+        ).map((userAsset ->
+                new AssetDto(
+                        userAsset.getAssetType().name(),
+                        userAsset.getAssetSymbol(),
+                        userAsset.getQuantity(),
+                        userAsset.getTimestampTransaction(),
+                        userAsset.getPrice()
+                )
+        )).toList());
+        LOGGER.info(String.format("user/asset %s",userDto));
+        return ResponseEntity.ok(
+                userDto
+        );
+    }
+
     @PostMapping("user")
     public ResponseEntity initUser(@AuthenticationPrincipal Jwt jwt) {
-        LOGGER.info("POST");
         boolean created = this.usersPersistance.initUser(jwt.getSubject());
 
         return created ?
