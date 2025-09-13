@@ -8,16 +8,14 @@ import { currenciesMap } from "../../interfaces/currencies-map";
 import { useApiClient } from "../../api-client";
 import { TransactionDto } from "../../interfaces/transaction-dto";
 import { SelectCurrency } from "../common/select-currency.component";
+import { AmountInput } from "../common/amount-input";
+import { CallServerResult } from "../../interfaces/call-server-result";
 
 interface AccountBalanceProps {
     assets: AssetDto[];
     onFundsAdded?: () => void;
 }
 
-interface CallServerResult {
-    error?: string;
-    reason?: string;
-}
 export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets, onFundsAdded }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [errors, setErrors] = useState({});
@@ -145,14 +143,20 @@ export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets, onFundsA
 
                         const fd = new FormData(e.currentTarget);
                         const amountRaw = fd.get("amount");
+                        const cleanedAmount = String(amountRaw ?? "")
+                            .replace(/,/g, "")
+                            .trim();
                         const currencyRaw = fd.get("currency");
+
+                        console.log(cleanedAmount, currencyRaw);
+
+
                         const payload = {
-                            amount: Number(amountRaw ?? 0),
+                            amount: Number(cleanedAmount ?? 0),
                             currency: String(currencyRaw ?? ""),
                         };
 
                         const result = await callServer(payload);
-                        console.log(result);
                         if (result.error === null) {
                             setErrors({});
                             onClose();
@@ -169,23 +173,7 @@ export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets, onFundsA
                         <>
                         <ModalHeader className="flex flex-col gap-1 text-white">Add funds</ModalHeader>
                         <ModalBody>
-                            <NumberInput
-                                isRequired
-                                classNames={{
-                                    innerWrapper: "bg-gray-950 text-white",
-                                    mainWrapper: "bg-gray-950 text-white",
-
-                                }}
-                                label="Funds"
-                                placeholder="Enter the amount"
-                                variant="bordered"
-                                name="amount"
-                                validate={(value) => {
-                                    if (value <= 0) {
-                                        return "Enter number greater than 0";
-                                    }
-                                }}
-                            />
+                            <AmountInput name="amount" label="Funds"/>
                             <SelectCurrency name="currency" />
                         </ModalBody>
                         <ModalFooter>

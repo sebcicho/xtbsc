@@ -31,15 +31,12 @@ public class TransactionsRestController {
 
     @PostMapping("transaction/account")
     public ResponseEntity storeAccountTransaction(@AuthenticationPrincipal Jwt jwt, @RequestBody TransactionWrapperDto transactionDto) {
-        if (transactionDto == null || transactionDto.getTransaction() == null) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "error", "Transaction failed",
-                    "reason","Missing transaction"
-            ));
+        ResponseEntity responseEntity = getTransactionValidationError(transactionDto);
+        if (responseEntity != null) {
+            return responseEntity;
         }
 
         TransactionResult result = this.transactionsPersistance.storeDepositTransaction(jwt.getSubject(), transactionDto.getTransaction());
-//        TransactionResult result = new TransactionResult(false, "Message", TransactionErrorCode.NOT_SUFFICIENT_QUANTITY);
         return result.isSuccesfull() ?
                 ResponseEntity.created(URI.create("/transaction/" + jwt.getSubject().replace('|', '/'))).build() :
                 ResponseEntity.badRequest().body(Map.of(
@@ -50,11 +47,9 @@ public class TransactionsRestController {
 
     @PostMapping("transaction/trade")
     public ResponseEntity storeTradeTrasaction(@AuthenticationPrincipal Jwt jwt, @RequestBody TransactionWrapperDto transactionDto) {
-        if (transactionDto == null || transactionDto.getTransaction() == null) {
-            return ResponseEntity.badRequest().body(Map.of(
-                    "error", "Transaction failed",
-                    "reason","Missing transaction"
-            ));
+        ResponseEntity responseEntity = getTransactionValidationError(transactionDto);
+        if (responseEntity != null) {
+            return responseEntity;
         }
 
         TransactionResult result = this.transactionsPersistance.storeTradeTransaction(jwt.getSubject(), transactionDto.getTransaction());
@@ -64,5 +59,22 @@ public class TransactionsRestController {
                         "error", "Transaction failed",
                         "reason", result.getMessage()
                 ));
+    }
+
+    private ResponseEntity getTransactionValidationError(TransactionWrapperDto transactionDto) {
+        if (transactionDto == null || transactionDto.getTransaction() == null) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "Transaction failed",
+                    "reason","Missing transaction"
+            ));
+        }
+
+        if (transactionDto.getTransaction().getQuantity() == null) {
+            return ResponseEntity.badRequest().body(Map.of(
+                    "error", "Transaction failed",
+                    "reason","Missing quantity"
+            ));
+        }
+        return null;
     }
 }

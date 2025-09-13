@@ -46,8 +46,12 @@ export const AssetPage: React.FC = () => {
               : symbol
             } Overview</h2>
             <div className="mb-8 flex flex-row justify-between">
-              <AssetInfo currentData={currentData} name={stockAssetFromState?.name || symbol} symbol={stockAssetFromState?.symbol || symbol} type={stockAssetFromState?.type || 'Currency'}/>
-              <AssetBalance currentData={currentData} symbol={stockAssetFromState?.symbol || symbol} type={stockAssetFromState?.type || 'Currency'}/>
+              <div className="mr-8">
+                <AssetInfo currentData={currentData} name={stockAssetFromState?.name || symbol} symbol={stockAssetFromState?.symbol || symbol} type={stockAssetFromState?.type || 'Currency'}/>
+              </div>
+              <div className="ml-8">
+                <AssetBalance symbol={stockAssetFromState?.symbol || symbol} type={stockAssetFromState?.type || 'Currency'} onTransactionMade={() => console.log("Transaction made")}/>
+              </div>
             </div>
             <FinancialChart
               symbol={symbol}
