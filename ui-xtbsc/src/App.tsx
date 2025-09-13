@@ -2,13 +2,13 @@ import React from 'react';
 
 import { LandingPage } from './components/landing-page.component';
 import { Route, Routes } from 'react-router-dom';
-import { AssetPage } from './components/asset-page.component';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Provider } from 'react-redux';
 import { store, persistor } from './state/redux-configurator';
 import { Navbar, NavbarBrand, Link } from "@heroui/react";
 import { LoginButton } from './components/login/login-button.component';
 import { UserPage } from './components/user-page.component';
+import { AssetPage } from './components/asset/asset-page.component';
 
 
 export default function App() {

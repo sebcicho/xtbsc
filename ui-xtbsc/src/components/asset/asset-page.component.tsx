@@ -1,14 +1,14 @@
 import { useParams } from "react-router-dom";
-import { FinancialChart } from "./financial-chart.component";
-import { Spinner } from "@heroui/react";
+import { fetchMetadata, useAppDispatch } from "../../state/metadata-reducer";
 import { useSelector } from "react-redux";
-import { RootState } from "../state/redux-configurator";
-import { useAppDispatch } from '../state/metadata-reducer';
-import { ChartType } from "../interfaces/enums";
+import { RootState } from "../../state/redux-configurator";
 import { useEffect, useState } from "react";
-import { fetchMetadata } from "../state/metadata-reducer";
+import { ChartType } from "../../interfaces/enums";
 import { AssetInfo } from "./asset-info.component";
-import { AssetBalance } from "./asset-balance.component";
+import { AssetBalance } from "../balance/asset-balance.component";
+import { FinancialChart } from "../common/financial-chart.component";
+import { Spinner } from "@heroui/react";
+
 
 export const AssetPage: React.FC = () => {
   const dispatch = useAppDispatch();

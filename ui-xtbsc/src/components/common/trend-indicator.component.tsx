@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trend } from '../interfaces/enums';
+import { Trend } from '../../interfaces/enums';
 
 interface FinancialChartProps {
   trend?: Trend,

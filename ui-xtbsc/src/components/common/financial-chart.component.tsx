@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
-import { mapStockData } from '../mappers/stock-data.mapper';
+import { mapStockData } from '../../mappers/stock-data.mapper';
 import { Card, CardBody, CardHeader, Spinner } from '@heroui/react';
-import { DataPoint } from '../interfaces/data-point';
-import { calculatePercentage, calculateTrend } from '../utils/trend-calculator';
-import { ChartType, Trend } from '../interfaces/enums';
-import { getColor } from '../utils/trend-color-util';
-import { TrendIndicator } from './trend-indicator.component';
+import { DataPoint } from '../../interfaces/data-point';
+import { calculatePercentage, calculateTrend } from '../../utils/trend-calculator';
+import { ChartType, Trend } from '../../interfaces/enums';
+import { getColor } from '../../utils/trend-color-util';
 import { useDispatch } from 'react-redux';
-import { setCurrentData } from '../state/current-data-reducer';
+import { setCurrentData } from '../../state/current-data-reducer';
+import { TrendIndicator } from './trend-indicator.component';
 
 interface FinancialChartProps {
   symbol: string;

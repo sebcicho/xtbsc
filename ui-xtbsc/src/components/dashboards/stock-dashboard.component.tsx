@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { FinancialChart } from './financial-chart.component';
+import { FinancialChart } from '../common/financial-chart.component';
 import { Card, CardBody, CardHeader, Input, Spinner } from '@heroui/react';
-import { StockMetadata } from '../interfaces/stock-metadata';
-import { ChartType } from '../interfaces/enums';
+import { StockMetadata } from '../../interfaces/stock-metadata';
+import { ChartType } from '../../interfaces/enums';
 import { useDispatch } from 'react-redux';
-import { setStockMetadata } from '../state/metadata-reducer';
+import { setStockMetadata } from '../../state/metadata-reducer';
 import { useNavigate } from 'react-router-dom';
 
 interface StockDashboardProps {

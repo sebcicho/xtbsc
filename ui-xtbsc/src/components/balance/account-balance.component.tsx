@@ -1,12 +1,12 @@
 import { Button, Card, Form, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, NumberInput, Select, SelectItem, Spinner, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, useDisclosure } from "@heroui/react";
 import { useSelector } from "react-redux";
-import { RootState } from "../state/redux-configurator";
+import { RootState } from "../../state/redux-configurator";
 import { useEffect, useMemo, useState } from "react";
-import { fetchMetadata, useAppDispatch } from "../state/metadata-reducer";
-import { AssetDto } from "../interfaces/asset-dto";
-import { currenciesMap } from "../interfaces/currencies-map";
-import { useApiClient } from "../api-client";
-import { TransactionDto } from "../interfaces/transaction-dto";
+import { fetchMetadata, useAppDispatch } from "../../state/metadata-reducer";
+import { AssetDto } from "../../interfaces/asset-dto";
+import { currenciesMap } from "../../interfaces/currencies-map";
+import { useApiClient } from "../../api-client";
+import { TransactionDto } from "../../interfaces/transaction-dto";
 
 interface AccountBalanceProps {
     assets: AssetDto[];

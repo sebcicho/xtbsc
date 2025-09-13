@@ -1,9 +1,9 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { DataPoint } from "../interfaces/data-point";
+import { DataPoint } from "../../interfaces/data-point";
 import { useEffect, useState } from "react";
-import { useApiClient } from "../api-client";
-import { currenciesMap } from "../interfaces/currencies-map";
-import { AssetDto } from "../interfaces/asset-dto";
+import { useApiClient } from "../../api-client";
+import { currenciesMap } from "../../interfaces/currencies-map";
+import { AssetDto } from "../../interfaces/asset-dto";
 
 interface AssetBalanceProps {
   currentData: DataPoint[],

@@ -47,7 +47,7 @@ public class UserRestController {
     }
 
     @GetMapping(value = "user/asset", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserDto> getUser(@AuthenticationPrincipal Jwt jwt, @RequestParam String symbol) {
+    public ResponseEntity<UserDto> getUserAsset(@AuthenticationPrincipal Jwt jwt, @RequestParam String symbol) {
         User user = this.usersPersistance.getUser(jwt.getSubject());
         UserDto userDto = new UserDto(user.getOktaUserId(), user.getAssets().stream().filter(
                 userAsset -> userAsset.getAssetSymbol().equals(symbol)

@@ -1,9 +1,9 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { NotAuthorized } from "./not-authorized.component";
+import { NotAuthorized } from "./login/not-authorized.component";
 import { Spinner } from "@heroui/react";
 import { useApiClient } from "../api-client";
 import { useEffect, useState } from "react";
-import { AccountBalance } from "./account-balance.component";
+import { AccountBalance } from "./balance/account-balance.component";
 
 
 export const UserPage: React.FC = () => {

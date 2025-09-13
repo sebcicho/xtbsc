@@ -1,5 +1,5 @@
-import { CurrencyDashboard } from "./currency-dashboard.component";
-import { StockDashboard } from "./stock-dashboard.component";
+import { CurrencyDashboard } from "./dashboards/currency-dashboard.component";
+import { StockDashboard } from "./dashboards/stock-dashboard.component";
 
 
 export const LandingPage: React.FC = () => {

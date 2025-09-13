@@ -1,5 +1,6 @@
-import { currenciesMap } from "../interfaces/currencies-map";
-import { DataPoint } from "../interfaces/data-point";
+import { currenciesMap } from "../../interfaces/currencies-map";
+import { DataPoint } from "../../interfaces/data-point";
+
 
 interface AssetInfoProps {
   currentData: DataPoint[],
