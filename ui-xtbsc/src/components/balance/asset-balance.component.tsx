@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useApiClient } from "../../api-client";
 import { currenciesMap } from "../../interfaces/currencies-map";
 import { AssetDto } from "../../interfaces/asset-dto";
+import { Button } from "@heroui/react";
 
 interface AssetBalanceProps {
   currentData: DataPoint[],
@@ -34,12 +35,23 @@ export const AssetBalance: React.FC<AssetBalanceProps> = ({ currentData, symbol,
 
     return (isAuthenticated && user && assetUserDetails) ?
         <div>
-            <p className="font-semibold mb-1">
-                    Units: <span className="font-bold">{units}</span>
-            </p>
-            <p className="font-semibold mb-1">
-                    Held value: <span className="font-bold">{`${heldValue} ${type==='Currency' ? currenciesMap[symbol] ?? symbol : '$'}`}</span>
-            </p>
+          <p className="mb-1">
+            <Button className="" onPress={() => console.log("Buy")}>
+                Buy
+            </Button>
+          </p>
+          <p className="mb-1">
+            <Button className="" onPress={() => console.log("Sell")}>
+                Sell
+            </Button>
+          </p>
+          <p className="font-semibold mb-1">
+                  Units: <span className="font-bold">{units}</span>
+          </p>
+          <p className="font-semibold mb-1">
+                  Held value: <span className="font-bold">{`${heldValue} ${type==='Currency' ? currenciesMap[symbol] ?? symbol : '$'}`}</span>
+          </p>
+
         </div> 
         : null;
 }

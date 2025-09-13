@@ -7,6 +7,7 @@ import { AssetDto } from "../../interfaces/asset-dto";
 import { currenciesMap } from "../../interfaces/currencies-map";
 import { useApiClient } from "../../api-client";
 import { TransactionDto } from "../../interfaces/transaction-dto";
+import { SelectCurrency } from "../common/select-currency.component";
 
 interface AccountBalanceProps {
     assets: AssetDto[];
@@ -185,26 +186,7 @@ export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets, onFundsA
                                     }
                                 }}
                             />
-                            <Select
-                                isRequired 
-                                variant="bordered"
-                                classNames={{
-                                    trigger: "text-white bg-gray-950",
-                                    value: "text-white bg-gray-950 group-data-[has-value=true]:!text-white",
-                                    popoverContent: "bg-gray-950 text-white",
-                                    listbox: "bg-gray-950 text-white",
-                                    innerWrapper: "bg-gray-950 text-white",
-                                    mainWrapper: "bg-gray-950 text-white",
-
-                                }}
-                                label="Currency" placeholder="Select a currency"
-                                name="currency"
-                                >
-                                {Object.entries(currenciesMap).map(([key, ]) => (
-                                    <SelectItem
-                                        key={key}>{key}</SelectItem>
-                                ))}
-                            </Select>
+                            <SelectCurrency name="currency" />
                         </ModalBody>
                         <ModalFooter>
                             <Button color="danger" variant="flat" onPress={onClose}>
