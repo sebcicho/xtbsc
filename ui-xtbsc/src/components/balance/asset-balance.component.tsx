@@ -8,6 +8,7 @@ import { AmountInput } from "../common/amount-input";
 import { SelectCurrency } from "../common/select-currency.component";
 import { TransactionDto } from "../../interfaces/transaction-dto";
 import { CallServerResult } from "../../interfaces/call-server-result";
+import { floorToTwoDecimal } from "../../utils/floor-util";
 
 interface AssetBalanceProps {
   symbol: string,
@@ -31,7 +32,7 @@ export const AssetBalance: React.FC<AssetBalanceProps> = ({ symbol, type }) => {
     const lastAsset = assets?.[assets.length - 1];
 
     const units = lastAsset?.quantity ?? 0;
-    const heldValue = lastAsset ? Number((lastAsset.quantity * lastAsset.price).toFixed(2)) : 0;
+    const heldValue = lastAsset ? floorToTwoDecimal(lastAsset.quantity * lastAsset.price) : 0;
     const headerText = mode?.mode === "BUY" ? "Buy" : mode?.mode === "SELL" ? "Sell" :"";
 
     const fetchAssetUserDetails = async () => {

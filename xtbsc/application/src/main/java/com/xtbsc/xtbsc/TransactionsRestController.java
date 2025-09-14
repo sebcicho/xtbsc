@@ -1,9 +1,6 @@
 package com.xtbsc.xtbsc;
 
-
-import com.xtbsc.xtbsc.dto.TransactionDto;
 import com.xtbsc.xtbsc.dto.TransactionWrapperDto;
-import com.xtbsc.xtbsc.result.TransactionErrorCode;
 import com.xtbsc.xtbsc.result.TransactionResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

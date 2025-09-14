@@ -10,6 +10,7 @@ import { TransactionDto } from "../../interfaces/transaction-dto";
 import { SelectCurrency } from "../common/select-currency.component";
 import { AmountInput } from "../common/amount-input";
 import { CallServerResult } from "../../interfaces/call-server-result";
+import { floorToTwoDecimal } from "../../utils/floor-util";
 
 interface AccountBalanceProps {
     assets: AssetDto[];
@@ -112,14 +113,14 @@ export const AccountBalance: React.FC<AccountBalanceProps> = ({ assets, onFundsA
 
                     <TableBody
                         isLoading={isLoading}
-                        items={mergedCurrencyData}
+                        items={mergedCurrencyData.filter(item => item.quantity > 0)}
                         loadingContent={<Spinner label="Loading..." />}
                         emptyContent={"No currencies available"}
                     >
                         {(item) => (
                         <TableRow key={item.symbol}>
                             <TableCell>{item.symbol}</TableCell>
-                            <TableCell>{item.quantity} {currenciesMap[item.symbol]}</TableCell>
+                            <TableCell>{floorToTwoDecimal(item.quantity)} {currenciesMap[item.symbol]}</TableCell>
                         </TableRow>
                         )}
                     </TableBody>

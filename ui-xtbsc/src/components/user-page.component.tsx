@@ -4,6 +4,7 @@ import { Spinner } from "@heroui/react";
 import { useApiClient } from "../api-client";
 import { useEffect, useState } from "react";
 import { AccountBalance } from "./balance/account-balance.component";
+import { AssetsSummary } from "./balance/assets-summary.component";
 
 
 export const UserPage: React.FC = () => {
@@ -35,9 +36,14 @@ export const UserPage: React.FC = () => {
         (isAuthenticated && user) ?
           <div className="m-8">
             <h1 className="text-2xl font-bold mb-8 text-foreground">Your Dashboard</h1>
-            <AccountBalance assets={userDetails?.assets || []} onFundsAdded={() => {
-                fetchUserDetails();
-            }} />
+            <div className="mb-8">
+              <AccountBalance assets={userDetails?.assets || []} onFundsAdded={() => {
+                  fetchUserDetails();
+              }} />
+            </div>
+            <div className="mb-8">
+              <AssetsSummary assets={userDetails?.assets || []} />
+            </div>
           </div> :
           <NotAuthorized />
       )}
